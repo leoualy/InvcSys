@@ -1,0 +1,12 @@
+J:\GitHub\InvcSys\Build\InvcSys.exe.config
+J:\GitHub\InvcSys\Build\InvcSys.exe
+J:\GitHub\InvcSys\Build\InvcSys.pdb
+J:\GitHub\InvcSys\Src\InvcSys\obj\Debug\MainWindow.baml
+J:\GitHub\InvcSys\Src\InvcSys\obj\Debug\MainWindow.g.cs
+J:\GitHub\InvcSys\Src\InvcSys\obj\Debug\App.g.cs
+J:\GitHub\InvcSys\Src\InvcSys\obj\Debug\InvcSys_MarkupCompile.cache
+J:\GitHub\InvcSys\Src\InvcSys\obj\Debug\InvcSys.g.resources
+J:\GitHub\InvcSys\Src\InvcSys\obj\Debug\InvcSys.Properties.Resources.resources
+J:\GitHub\InvcSys\Src\InvcSys\obj\Debug\InvcSys.csproj.GenerateResource.Cache
+J:\GitHub\InvcSys\Src\InvcSys\obj\Debug\InvcSys.exe
+J:\GitHub\InvcSys\Src\InvcSys\obj\Debug\InvcSys.pdb
