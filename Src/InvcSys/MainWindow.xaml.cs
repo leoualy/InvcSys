@@ -29,5 +29,15 @@ namespace InvcSys
         {
             this.DragMove();
         }
+
+        private void Btn_Exit(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("公司信息存在哪，是否有固定的来源和存储方式?");
+        }
     }
 }
