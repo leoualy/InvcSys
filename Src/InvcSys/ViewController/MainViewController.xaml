@@ -115,7 +115,9 @@
                 <RowDefinition/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <DataGrid ItemsSource="{Binding InvoiceItems}" AutoGenerateColumns="False">
+            <DataGrid ItemsSource="{Binding InvoiceItems}" AutoGenerateColumns="False"
+                      EnableColumnVirtualization="True" EnableRowVirtualization="True"
+                      >
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Width="6*" Binding="{Binding IsSelected}"/>
                     <DataGridTextColumn Width="15*" Header="开票项" Binding="{Binding ArticlesCode}"/>
