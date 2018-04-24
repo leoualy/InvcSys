@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvcSys", "Src\InvcSys\InvcSys.csproj", "{EE2FF0E9-60D5-4FCF-9DBE-A876AD9C50EA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{060D509E-16AB-410D-ADD0-5129EBEDE89F} = {060D509E-16AB-410D-ADD0-5129EBEDE89F}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piaotong.OpenApi", "Src\Piaotong.OpenApi\Piaotong.OpenApi.csproj", "{060D509E-16AB-410D-ADD0-5129EBEDE89F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{EE2FF0E9-60D5-4FCF-9DBE-A876AD9C50EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE2FF0E9-60D5-4FCF-9DBE-A876AD9C50EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE2FF0E9-60D5-4FCF-9DBE-A876AD9C50EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{060D509E-16AB-410D-ADD0-5129EBEDE89F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{060D509E-16AB-410D-ADD0-5129EBEDE89F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{060D509E-16AB-410D-ADD0-5129EBEDE89F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{060D509E-16AB-410D-ADD0-5129EBEDE89F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
