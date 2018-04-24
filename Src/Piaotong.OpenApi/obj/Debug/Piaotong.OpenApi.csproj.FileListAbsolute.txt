@@ -1,0 +1,4 @@
+J:\GitHub\InvcSys\Build\Piaotong.OpenApi\Piaotong.OpenApi.dll
+J:\GitHub\InvcSys\Build\Piaotong.OpenApi\Piaotong.OpenApi.pdb
+J:\GitHub\InvcSys\Src\Piaotong.OpenApi\obj\Debug\Piaotong.OpenApi.dll
+J:\GitHub\InvcSys\Src\Piaotong.OpenApi\obj\Debug\Piaotong.OpenApi.pdb

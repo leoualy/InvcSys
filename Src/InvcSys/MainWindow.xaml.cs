@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using InvcSys.Model;
 
 namespace InvcSys
 {
@@ -28,16 +29,6 @@ namespace InvcSys
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
-        }
-
-        private void Btn_Exit(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("公司信息存在哪，是否有固定的来源和存储方式?");
         }
     }
 }
