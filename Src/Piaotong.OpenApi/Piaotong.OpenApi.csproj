@@ -57,7 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RSAHelper.cs" />
     <Compile Include="ECB3DES.cs" />
-    <Compile Include="SerialNoUtil.cs" />
+    <Compile Include="SerialNoHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

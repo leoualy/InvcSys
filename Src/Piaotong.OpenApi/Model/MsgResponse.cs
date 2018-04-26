@@ -45,5 +45,7 @@ namespace Piaotong.OpenApi
         /// 业务报文内容 必填
         /// </summary>
         public string content { get; set; }
+
+        public ContentResponse ContentResponse { get; set; }
     }
 }

@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using InvcSys.Model;
+using InvcSys.ViewController;
 
 namespace InvcSys
 {
@@ -24,6 +24,12 @@ namespace InvcSys
         public MainWindow()
         {
             InitializeComponent();
+            this.Loaded += MainWindow_Loaded;
+        }
+
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.gridMain.Children.Add(new MainViewController());
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

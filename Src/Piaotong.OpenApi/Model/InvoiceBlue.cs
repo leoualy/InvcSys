@@ -46,7 +46,7 @@ namespace Piaotong.OpenApi
         /// <summary>
         /// 金额 必填
         /// </summary>
-        public decimal invoiceAmount { get; set; }
+        public string invoiceAmount { get; set; }
         /// <summary>
         /// 税率 必填
         /// </summary>

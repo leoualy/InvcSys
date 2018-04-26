@@ -27,5 +27,18 @@ namespace Piaotong.OpenApi
                 throw new Exception(string.Format("转换json时出错,异常消息:{0}", e.Message));
             }
         }
+        public static T String2Object<T>(string json)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(json);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(string.Format("转换json时出错,异常消息:{0}", e.Message));
+            }
+        }
+
+
     }
 }

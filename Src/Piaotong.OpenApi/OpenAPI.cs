@@ -22,30 +22,56 @@ namespace Piaotong.OpenApi
         string mPrivateKey;
         string mPlatformCode;
         
-        public string BuildRequestJSON(string content)
+        
+
+        public MsgResponse PostJson(string url, string content)
         {
+            MsgResponse rsp = null;
+            try
+            {
+                string json = BuildRequestJSON(content);
+                string jsonRep = HttpHelper.Post(url, Encoding.UTF8.GetBytes(json));
+                rsp = JsonHelper.String2Object<MsgResponse>(jsonRep);
+                rsp.content = ECB3DES.Decrypt(mPasswd, rsp.content);
+                rsp.ContentResponse = JsonHelper.String2Object<ContentResponse>(rsp.content);
+                return rsp;
+            }
+            catch (Exception e)
+            {
+                if (rsp == null)
+                {
+                    rsp = new MsgResponse();
+                }
+                rsp.msg=e.Message;
+                return rsp;
+            }
+        }
+
+        #region 私有
+        string BuildRequestJSON(string content)
+        {
+
             Dictionary<string, string> msg = new Dictionary<string, string>();
             msg.Add("platformCode", mPlatformCode);
             msg.Add("signType", "RSA");
             msg.Add("format", "JSON");
             msg.Add("version", "1.0");
-            msg.Add("content",ECB3DES.Encrypt(mPasswd,content));
-            msg.Add("timestamp", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-            msg.Add("serialNo", SerialNoUtil.GetSerialNo(mPrefix));
-            string sign = generateSignContent(msg);
-            Console.WriteLine(sign);
-            msg.Add("sign", RSAHelper.Sign(sign, mPrivateKey));
-
-            return JsonHelper.Object2String<Dictionary<string,string>>(msg);
+            try
+            {
+                msg.Add("content", ECB3DES.Encrypt(mPasswd, content));
+                msg.Add("timestamp", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                msg.Add("serialNo", SerialNoHelper.GetSerialNo(mPrefix));
+                string sign = generateSignContent(msg);
+                msg.Add("sign", RSAHelper.Sign(sign, mPrivateKey));
+                return JsonHelper.Object2String<Dictionary<string, string>>(msg);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("生成完整JSON时出错:" + e.Message);
+            }
         }
-
-
         string generateSignContent(Dictionary<string,string> hash)
         {
-            // 将键值按字母升序排序
-            //ArrayList keys = new ArrayList(hash.Keys);
-            //keys.Sort();
-            //hash.Keys.ToList().Sort();
             List<string> keys=hash.Keys.ToList();
             keys.Sort();
             StringBuilder builder = new StringBuilder();
@@ -61,7 +87,6 @@ namespace Piaotong.OpenApi
             }
             return builder.ToString();
         }
-
-
+        #endregion 私有
     }
 }

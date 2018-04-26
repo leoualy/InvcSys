@@ -21,21 +21,36 @@ namespace Piaotong.OpenApi
 {
     public class RSAHelper
     {
+        /// <summary>
+        /// RSA加签
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="privateKey"></param>
+        /// <returns></returns>
         public static string Sign(string content, string privateKey)
         {
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            rsa.FromXmlString(privateKey);
-            SHA1 sh = new SHA1CryptoServiceProvider();
-            byte[] bytesSigned = rsa.SignData(Encoding.UTF8.GetBytes(content), sh);
-            
-            return Convert.ToBase64String(bytesSigned);
+            try
+            {
+                RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+                rsa.FromXmlString(privateKey);
+                SHA1 sh = new SHA1CryptoServiceProvider();
+                byte[] bytesSigned = rsa.SignData(Encoding.UTF8.GetBytes(content), sh);
+
+                return Convert.ToBase64String(bytesSigned);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("数据加签时出错:" + e.Message);
+            }
         }
-        //public static string Sign()
-        
 
-
-
-
+        /// <summary>
+        /// RSA验签
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="signedString"></param>
+        /// <param name="publicKey"></param>
+        /// <returns></returns>
         public static bool Verify(string content, string signedString, string publicKey)
         {
             byte[] Data = Encoding.UTF8.GetBytes(content);
@@ -83,17 +98,25 @@ namespace Piaotong.OpenApi
 
         public static string PrivateKeyJava2Dotnet(string keyJava)
         {
-            RsaPrivateCrtKeyParameters privateKeyParam = (RsaPrivateCrtKeyParameters)
+            try
+            {
+                RsaPrivateCrtKeyParameters privateKeyParam = (RsaPrivateCrtKeyParameters)
                 PrivateKeyFactory.CreateKey(Convert.FromBase64String(keyJava));
-            return string.Format("<RSAKeyValue><Modulus>{0}</Modulus><Exponent>{1}</Exponent><P>{2}</P><Q>{3}</Q><DP>{4}</DP><DQ>{5}</DQ><InverseQ>{6}</InverseQ><D>{7}</D></RSAKeyValue>",
-            Convert.ToBase64String(privateKeyParam.Modulus.ToByteArrayUnsigned()),
-            Convert.ToBase64String(privateKeyParam.PublicExponent.ToByteArrayUnsigned()),
-            Convert.ToBase64String(privateKeyParam.P.ToByteArrayUnsigned()),
-            Convert.ToBase64String(privateKeyParam.Q.ToByteArrayUnsigned()),
-            Convert.ToBase64String(privateKeyParam.DP.ToByteArrayUnsigned()),
-            Convert.ToBase64String(privateKeyParam.DQ.ToByteArrayUnsigned()),
-            Convert.ToBase64String(privateKeyParam.QInv.ToByteArrayUnsigned()),
-            Convert.ToBase64String(privateKeyParam.Exponent.ToByteArrayUnsigned()));    
+                return string.Format("<RSAKeyValue><Modulus>{0}</Modulus><Exponent>{1}</Exponent><P>{2}</P><Q>{3}</Q><DP>{4}</DP><DQ>{5}</DQ><InverseQ>{6}</InverseQ><D>{7}</D></RSAKeyValue>",
+                Convert.ToBase64String(privateKeyParam.Modulus.ToByteArrayUnsigned()),
+                Convert.ToBase64String(privateKeyParam.PublicExponent.ToByteArrayUnsigned()),
+                Convert.ToBase64String(privateKeyParam.P.ToByteArrayUnsigned()),
+                Convert.ToBase64String(privateKeyParam.Q.ToByteArrayUnsigned()),
+                Convert.ToBase64String(privateKeyParam.DP.ToByteArrayUnsigned()),
+                Convert.ToBase64String(privateKeyParam.DQ.ToByteArrayUnsigned()),
+                Convert.ToBase64String(privateKeyParam.QInv.ToByteArrayUnsigned()),
+                Convert.ToBase64String(privateKeyParam.Exponent.ToByteArrayUnsigned()));    
+            }
+            catch (Exception e)
+            {
+                throw new Exception("java格式私钥转化为.net格式时出错:" + e.Message);
+            }
+            
         }
         public static string PublicKeyJava2Dotnet(string keyJava)
         {

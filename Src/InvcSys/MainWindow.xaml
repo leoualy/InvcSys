@@ -18,9 +18,7 @@
             <TextBlock Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center">发票处理</TextBlock>
             
             <!--内容部分-->
-            <Grid Grid.Row="1">
-                <local:MainViewController/>
-            </Grid>
+            <Grid Grid.Row="1" Name="gridMain"/>
             <!--内容部分-->
         
         

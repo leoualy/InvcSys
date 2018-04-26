@@ -9,16 +9,17 @@ using System.Threading.Tasks;
 
 namespace Piaotong.OpenApi
 {
-    public class HttpHelper
+    internal class HttpHelper
     {
-        public static string Post(string url,byte[] content)
+        internal static string Post(string url,byte[] content)
         {
             HttpWebRequest rq = WebRequest.Create(url) as HttpWebRequest;
             rq.Accept = "*";
             rq.Method = "POST";
             rq.ContentType = "application/json";
             rq.ContentLength = content.Length;
-
+            // 超时值为50毫秒
+            rq.Timeout = 50000;
             try
             {
                 using (Stream s = rq.GetRequestStream())
@@ -28,7 +29,7 @@ namespace Piaotong.OpenApi
             }
             catch (Exception e)
             {
-                throw new Exception(string.Format("向请求流写入数据时出错,异常消息:{0}", e.Message));
+                throw new Exception(string.Format("向请求流写入数据失败:{0}",e.Message));
             }
             try
             {
@@ -43,7 +44,7 @@ namespace Piaotong.OpenApi
             }
             catch (Exception e)
             {
-                throw new Exception(string.Format("发送POST请求时出错,异常消息:{0}", e.Message));
+                throw new Exception(string.Format("获取http响应时出错:{0}", e.Message));
             }
         }
     }

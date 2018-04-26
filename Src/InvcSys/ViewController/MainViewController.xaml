@@ -63,13 +63,13 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" HorizontalAlignment="Right">发票类型:</TextBlock>
 
-                        <RadioButton Grid.Column="1" GroupName="radio_type">普票</RadioButton>
-                        <RadioButton Grid.Column="2" GroupName="radio_type">专票</RadioButton>
+                        <RadioButton Grid.Column="1" GroupName="radio_type" Checked="rdiobtn_Checked">普票</RadioButton>
+                        <RadioButton Grid.Column="2" GroupName="radio_type" Checked="rdiobtn_Checked" >专票</RadioButton>
                         <Button Grid.Column="3" Foreground="Red" Click="Button_Click">公司信息</Button>
 
                         <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right">发票材质:</TextBlock>
-                        <RadioButton Grid.Row="1" Grid.Column="1" GroupName="radio_material">纸票</RadioButton>
-                        <RadioButton Grid.Row="1" Grid.Column="2" GroupName="radio_material">电票</RadioButton>
+                        <RadioButton Grid.Row="1" Grid.Column="1" GroupName="radio_material" Checked="rdiobtn_Checked">纸票</RadioButton>
+                        <RadioButton Grid.Row="1" Grid.Column="2" GroupName="radio_material" Checked="rdiobtn_Checked">电票</RadioButton>
                         <Button Grid.Row="1" Grid.Column="3">清空</Button>
                     </Grid>
                     <!--发票类型部分-->
@@ -96,10 +96,10 @@
                         <TextBlock Grid.Row="5" VerticalAlignment="Center">账号:</TextBlock>
                         <TextBlock Grid.Row="6" VerticalAlignment="Center">温馨提示:</TextBlock>
 
-                        <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Height="27"></TextBox>
+                        <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Height="27" Text="{Binding Name}"/>
                         <TextBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="27"></TextBox>
-                        <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Height="27"></TextBox>
-                        <TextBox Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Height="27"></TextBox>
+                        <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Height="27" Text="{Binding Address}"/>
+                        <TextBox Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Height="27" Text="{Binding Phone}"/>
                         <TextBox Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" Height="27"></TextBox>
                         <TextBox Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" Height="27"></TextBox>
                         <TextBlock   TextWrapping="WrapWithOverflow" Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" Height="42">
@@ -144,11 +144,25 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Foreground="Red">1号分机</TextBlock>
-                <Button Grid.Column="1" Margin="20,0">开票</Button>
+                <Button Grid.Column="1" Margin="20,0" Click="btn_Draw">开票</Button>
                 <Button Grid.Column="2" Margin="20,0" Foreground="Red">提前开票</Button>
                 <Button Grid.Column="3" Margin="20,0" Foreground="Red">发票查询</Button>
                 <Button Grid.Column="4" Margin="20,0,0,0" Click="Btn_Exit">退出</Button>
             </Grid>
         </Border>
+        <Grid Grid.Row="0" Grid.RowSpan="3" Visibility="{Binding VisibilityStatus}">
+            <Grid.Background>
+                <SolidColorBrush Opacity="0.2" Color="Black"/>
+            </Grid.Background>
+            <Grid Width="320" Height="100" Background="White">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="7*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">开票状态:</TextBlock>
+                <TextBlock TextWrapping="WrapWithOverflow" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Text="{Binding DrawStatus}"/>
+            </Grid>
+            
+        </Grid>
     </Grid>
 </UserControl>

@@ -26,9 +26,10 @@ namespace Piaotong.OpenApi
             }
             catch (Exception e)
             {
-                throw new Exception(string.Format("3DES加密时出错,异常消息:{0}",e.Message));
+                throw new Exception(string.Format("3DES加密时出错:{0}",e.Message));
             }
         }
+
         internal static string Decrypt(string key, string srcString)
         {
             try
