@@ -40,13 +40,10 @@ namespace InvcSys
         /// <param name="viewModel"></param>
         internal static void DrawPaperBlue(MainViewModel viewModel)
         {
-
             if (!apiInit())
             {
                 return;
             }
-        
-            
             string url = ConfigurationManager.AppSettings["PaperBlue"];
             postBlueJson(viewModel, url, "纸质");
         }
@@ -125,17 +122,14 @@ namespace InvcSys
             invoice.invoiceReqSerialNo = SerialNoHelper.GetInvoiceReqSerialNo(mcPrefix);
             // todo:设置字段
             invoice.buyerName = viewModel.Name;
+            // 纸质蓝票的分机号时必填项
             if (type == "纸质")
             {
                 invoice.extensionNum = "1";
             }
             
             List<Goods> goodsList = new List<Goods>();
-            if (viewModel.InvoiceItems == null || viewModel.InvoiceItems.Count <= 0)
-            {
-                throw new Exception("没有选中的消费项目");
-            }
-
+            
             foreach (InvoiceItem item in viewModel.InvoiceItems)
             {
                 // 只添加被选中的项目
