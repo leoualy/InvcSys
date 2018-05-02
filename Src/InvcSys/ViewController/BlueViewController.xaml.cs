@@ -27,8 +27,6 @@ namespace InvcSys.ViewController
             this.Loaded += BlueViewController_Loaded;
         }
 
-
-
         void BlueViewController_Loaded(object sender, RoutedEventArgs e)
         {
             mBlueViewModel = new BlueViewModel();
@@ -59,6 +57,7 @@ namespace InvcSys.ViewController
                 MessageBox.Show("请选择开票项目");
                 return;
             }
+            HomeWindow.ShowDrawStatus();
             PiaotongHelper.DrawElectronicBlue(mBlueViewModel);
         }
 
@@ -82,6 +81,7 @@ namespace InvcSys.ViewController
                 MessageBox.Show("请选择开票项目");
                 return;
             }
+            HomeWindow.ShowDrawStatus();
             PiaotongHelper.DrawPaperBlue(mBlueViewModel);
         }
 

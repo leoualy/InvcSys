@@ -48,7 +48,7 @@ namespace InvcSys.ViewController
                 return;
             }
 
-
+            HomeWindow.ShowDrawStatus();
             PiaotongHelper.QueryPaper(mQueryViewModel);
         }
 
@@ -70,7 +70,7 @@ namespace InvcSys.ViewController
                 MessageBox.Show("请求流水号格式错误,必须为20位的字母或者数字");
                 return;
             }
-
+            HomeWindow.ShowDrawStatus();
             PiaotongHelper.QueryElectronic(mQueryViewModel);
         }
         bool tbxCheck()

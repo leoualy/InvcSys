@@ -39,7 +39,7 @@ namespace InvcSys.ViewController
                 MessageBox.Show("纳税人识别号格式错误,必须为15-20位的大写字母或者数字");
                 return;
             }
-           
+            HomeWindow.ShowDrawStatus();
             PiaotongHelper.DrawElectronicRed(mViewModel);
         }
 
@@ -55,6 +55,7 @@ namespace InvcSys.ViewController
                 MessageBox.Show("纳税人识别号格式错误,必须为15-20位的大写字母或者数字");
                 return;
             }
+            HomeWindow.ShowDrawStatus();
             PiaotongHelper.DrawPaperRed(mViewModel);
         }
 

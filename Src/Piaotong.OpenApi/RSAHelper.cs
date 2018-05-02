@@ -137,8 +137,5 @@ namespace Piaotong.OpenApi
             byte[] inArray = formatter.CreateSignature(rgbHash);
             return Convert.ToBase64String(inArray);
         }
-
-
-       
     }
 }

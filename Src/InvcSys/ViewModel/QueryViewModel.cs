@@ -19,10 +19,9 @@ namespace InvcSys
             mInvoiceDate = "0000-00-00";
             mDownloadUrl = "http://";
             mCode = "无";
-            
-
         }
         string mTaxpayerNum;
+
         public string TaxpayerNum
         {
             get { return mTaxpayerNum; }
@@ -108,11 +107,7 @@ namespace InvcSys
             }
         }
 
-
-
         #endregion 查询响应获取的字段
-
-
 
     }
 }

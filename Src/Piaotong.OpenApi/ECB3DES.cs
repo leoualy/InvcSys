@@ -1,4 +1,11 @@
-﻿using System;
+﻿/***************************************************************************
+ * 文件名:             ECB3DES
+ * 作者：              Liuy
+ * 日期：              2018-04-15
+ * 描述：              3DES加解密实现
+***************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +29,6 @@ namespace Piaotong.OpenApi
                 ICryptoTransform desEncrypt = des.CreateEncryptor();
                 byte[] buf = Encoding.UTF8.GetBytes(srcString);
                 return Convert.ToBase64String(desEncrypt.TransformFinalBlock(buf, 0, buf.Length));
-
             }
             catch (Exception e)
             {
@@ -49,6 +55,5 @@ namespace Piaotong.OpenApi
             }
         }
         #endregion 3DES
-
     }
 }

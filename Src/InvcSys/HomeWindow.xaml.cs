@@ -32,8 +32,10 @@ namespace InvcSys
             this.tabBlue.Content = new BlueViewController();
             this.tabRed.Content = new RedViewController();
             this.tabQuery.Content = new QueryViewController();
+            mcGridMask = this.gridMask;
+            mcTbxStatus = this.tbxDrawStatus;
             gridMask.Visibility = Visibility.Collapsed;
-            PiaotongHelper.HomeWindow = this;
+
             PiaotongHelper.OnHttpPost += PiaotongHelper_OnHttpPost;
         }
 
@@ -62,6 +64,14 @@ namespace InvcSys
         private void btn_exit(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        static Grid mcGridMask;
+        static TextBlock mcTbxStatus;
+        internal static void ShowDrawStatus()
+        {
+            mcGridMask.Visibility = System.Windows.Visibility.Visible;
+            mcTbxStatus.Text = "正在发送开票请求...";
         }
     }
 }

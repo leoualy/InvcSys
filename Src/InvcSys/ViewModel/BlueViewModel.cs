@@ -23,8 +23,6 @@ namespace InvcSys
         }
         // 是否含税
         public bool IsIncludeTax { get; set; }
-
-
         public string ArticlesCode { get; set; }
         public int Quantity { get; set; }
         //单价
@@ -33,7 +31,6 @@ namespace InvcSys
         public string MeteringUnit { get; set; }
         // 金额
         public decimal TransactionAmount { get; set; }
-
         // 税收分类代码
         public string TaxClassificationCode { get; set; }
         // 税率
@@ -46,11 +43,11 @@ namespace InvcSys
         public string DiscountTaxRateAmount { get; set; }
         // 折扣率值
         public string DiscountRateValue { get; set; }
-
-
     }
     public class BlueViewModel:ViewModel
     {
+        // erp传过来的参数
+        internal static string RESV_Name_ID;
         public BlueViewModel()
         {
             mBlueGoodses = new List<BlueGoods>();
@@ -63,7 +60,7 @@ be.* from RESERVATION_NAME rname,BillEntity be where
 be.Res_RowID=rname.resv_name_id and rname.resv_name_id=@resv_name_id";
 
             DataTable dt = SqlHelper.ExecDQLForDataTable(sql,
-                new List<IDataParameter>() { SqlHelper.CreateDataParameter("@resv_name_id", 39320) });
+                new List<IDataParameter>() { SqlHelper.CreateDataParameter("@resv_name_id",RESV_Name_ID) });
             foreach (DataRow dr in dt.Rows)
             {
                 BlueGoods goodes = SqlHelper.Row2Model<BlueGoods>(dr);
@@ -71,6 +68,7 @@ be.Res_RowID=rname.resv_name_id and rname.resv_name_id=@resv_name_id";
                 goodes.TaxClassificationCode = "1010101020000000000";
                 mBlueGoodses.Add(goodes);
             }
+
             Name = dt.Rows[0]["company"].ToString();
             Address = dt.Rows[0]["address"].ToString();
             Phone = dt.Rows[0]["phone"].ToString();
@@ -137,27 +135,5 @@ be.Res_RowID=rname.resv_name_id and rname.resv_name_id=@resv_name_id";
         // 开户行账号
         public string BuyerBankAccount { get; set; }
 
-
-        Visibility visibilityStatus;
-        public Visibility VisibilityStatus
-        {
-            get { return visibilityStatus; }
-            set
-            {
-                visibilityStatus = value;
-                OnPropertyChanged("VisibilityStatus");
-            }
-        }
-
-        string drawStatus;
-        public string DrawStatus
-        {
-            get { return drawStatus; }
-            set
-            {
-                drawStatus = value;
-                OnPropertyChanged("DrawStatus");
-            }
-        }
     }
 }

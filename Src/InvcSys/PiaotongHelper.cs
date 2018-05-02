@@ -20,102 +20,14 @@ namespace InvcSys
 {
     internal class PiaotongHelper
     {
-        internal static event Action<string> OnHttpPost;
-        internal static HomeWindow HomeWindow;
-        /// <summary>
-        /// 开具电子蓝票
-        /// </summary>
-        /// <param name="viewModel"></param>
-        internal static void DrawElectronicBlue(BlueViewModel viewModel)
+        static PiaotongHelper()
         {
-            
-            if (!apiInit())
-            {
-                return;
-            }
-            string url = ConfigurationManager.AppSettings["ElectronicBlue"];
-            postBlueJson(viewModel, url, "电子");
-        }
-        /// <summary>
-        /// 开具纸质蓝票
-        /// </summary>
-        /// <param name="viewModel"></param>
-        internal static void DrawPaperBlue(BlueViewModel viewModel)
-        {
-            if (!apiInit())
-            {
-                return;
-            }
-            string url = ConfigurationManager.AppSettings["PaperBlue"];
-            postBlueJson(viewModel, url, "纸质");
-        }
-        
-        /// <summary>
-        /// 开具电子红票
-        /// </summary>
-        /// <param name="viewModel"></param>
-        internal static void DrawElectronicRed(RedViewModel viewModel)
-        {
-            if (!apiInit())
-            {
-                return;
-            }
-            string url = ConfigurationManager.AppSettings["ElectronicRed"];
-            postRedJson(viewModel, url,"电子");
-        }
-
-        /// <summary>
-        /// 开具纸质红票
-        /// </summary>
-        /// <param name="viewModel"></param>
-        internal static void DrawPaperRed(RedViewModel viewModel)
-        {
-            if (!apiInit())
-            {
-                return;
-            }
-            string url = ConfigurationManager.AppSettings["PaperRed"];
-            postRedJson(viewModel, url,"纸质");
-        }
-
-        internal static void QueryPaper(QueryViewModel viewModel)
-        {
-            if (!apiInit())
-            {
-                return;
-            }
-            string url = ConfigurationManager.AppSettings["PaperQuery"];
-            postQueryJson(viewModel, url,"纸质");
-            
-        }
-        internal static void QueryElectronic(QueryViewModel viewModel)
-        {
-            if (!apiInit())
-            {
-                return;
-            }
-            string url = ConfigurationManager.AppSettings["ElectronicQuery"];
-            postQueryJson(viewModel, url, "电子");
-        }
-
-
-
-        #region 类私有
-        static OpenAPI mApi;
-        static string mcPrefix, mcDesKey, mcVersion;
-        static Logger mLogger;
-
-        
-        static bool apiInit()
-        {
-            HomeWindow.gridMask.Visibility = System.Windows.Visibility.Visible;
-            HomeWindow.tbxDrawStatus.Text = "正在发送开票请求...";
             if (mApi == null)
             {
-                mcDesKey=ConfigurationManager.AppSettings["3DESKey"];
-                string rsaPrivateKey=ConfigurationManager.AppSettings["RSAPrivateKey"];
-                string rsaPublicKey=ConfigurationManager.AppSettings["RSAPublicKey"];
-                string platformCode=ConfigurationManager.AppSettings["platformCode"];
+                mcDesKey = ConfigurationManager.AppSettings["3DESKey"];
+                string rsaPrivateKey = ConfigurationManager.AppSettings["RSAPrivateKey"];
+                string rsaPublicKey = ConfigurationManager.AppSettings["RSAPublicKey"];
+                string platformCode = ConfigurationManager.AppSettings["platformCode"];
                 mcPrefix = ConfigurationManager.AppSettings["Prefix"];
                 mcVersion = ConfigurationManager.AppSettings["Version"];
 
@@ -136,12 +48,69 @@ namespace InvcSys
                             OnHttpPost(e.Message);
                         }
                     });
-                    return false;
                 }
-                
+
+            }
         }
-            return true;
+
+        internal static event Action<string> OnHttpPost;
+        /// <summary>
+        /// 开具电子蓝票
+        /// </summary>
+        /// <param name="viewModel"></param>
+        internal static void DrawElectronicBlue(BlueViewModel viewModel)
+        {
+            string url = ConfigurationManager.AppSettings["ElectronicBlue"];
+            postBlueJson(viewModel, url, "电子");
         }
+        /// <summary>
+        /// 开具纸质蓝票
+        /// </summary>
+        /// <param name="viewModel"></param>
+        internal static void DrawPaperBlue(BlueViewModel viewModel)
+        {
+            string url = ConfigurationManager.AppSettings["PaperBlue"];
+            postBlueJson(viewModel, url, "纸质");
+        }
+        
+        /// <summary>
+        /// 开具电子红票
+        /// </summary>
+        /// <param name="viewModel"></param>
+        internal static void DrawElectronicRed(RedViewModel viewModel)
+        {
+            string url = ConfigurationManager.AppSettings["ElectronicRed"];
+            postRedJson(viewModel, url,"电子");
+        }
+
+        /// <summary>
+        /// 开具纸质红票
+        /// </summary>
+        /// <param name="viewModel"></param>
+        internal static void DrawPaperRed(RedViewModel viewModel)
+        {
+            string url = ConfigurationManager.AppSettings["PaperRed"];
+            postRedJson(viewModel, url,"纸质");
+        }
+
+        internal static void QueryPaper(QueryViewModel viewModel)
+        {
+            string url = ConfigurationManager.AppSettings["PaperQuery"];
+            postQueryJson(viewModel, url,"纸质");
+        }
+        internal static void QueryElectronic(QueryViewModel viewModel)
+        {
+            string url = ConfigurationManager.AppSettings["ElectronicQuery"];
+            postQueryJson(viewModel, url, "电子");
+        }
+
+
+
+        #region 类私有
+        static OpenAPI mApi;
+        static string mcPrefix, mcDesKey, mcVersion;
+        static Logger mLogger;
+
 
         static void postBlueJson(BlueViewModel viewModel,string url,string type)
         {

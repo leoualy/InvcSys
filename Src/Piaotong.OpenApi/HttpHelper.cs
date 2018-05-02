@@ -1,4 +1,11 @@
-﻿using System;
+﻿/***************************************************************************
+ * 文件名:             HttpHelper
+ * 作者：              Liuy
+ * 日期：              2018-04-15
+ * 描述：              http实现
+***************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,6 +38,7 @@ namespace Piaotong.OpenApi
             {
                 throw new Exception(string.Format("向请求流写入数据失败:{0}",e.Message));
             }
+            
             try
             {
                 using (HttpWebResponse rp = rq.GetResponse() as HttpWebResponse)
@@ -47,5 +55,6 @@ namespace Piaotong.OpenApi
                 throw new Exception(string.Format("获取http响应时出错:{0}", e.Message));
             }
         }
+
     }
 }
