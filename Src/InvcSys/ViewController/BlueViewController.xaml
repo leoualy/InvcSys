@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="InvcSys.ViewController.BlueViewController"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Width="760" Height="520">
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+        <DataGrid ItemsSource="{Binding BlueGoodses}" AutoGenerateColumns="False"
+                      EnableColumnVirtualization="True" EnableRowVirtualization="True"
+                      >
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Width="6*" Binding="{Binding IsSelected}"/>
+                
+                <DataGridTextColumn Width="15*" IsReadOnly="False" Header="开票项" Binding="{Binding ArticlesCode}"/>
+                <DataGridCheckBoxColumn Width="15*" Header="是否含税" Binding="{Binding IsIncludeTax}"/>
+                <DataGridTextColumn Width="15*" IsReadOnly="False" Header="税收分类" Binding="{Binding TaxClassificationCode}"/>
+                <DataGridTextColumn Width="8*" IsReadOnly="False" Header="税率" Binding="{Binding TaxRateValue}"/>
+                <DataGridTextColumn Width="15*" IsReadOnly="False" Header="税额" Binding="{Binding TaxRateAmount}"/>
+                <DataGridTextColumn Width="15*" Header="单价" Binding="{Binding Price}"/>
+                <DataGridTextColumn Width="15*" IsReadOnly="False" Header="单位" Binding="{Binding MeteringUnit}"/>
+                <DataGridTextColumn Width="8*" Header="数量" Binding="{Binding Quantity}"/>
+                <DataGridTextColumn Width="15*" Header="开票金额" Binding="{Binding TransactionAmount}"/>
+                <DataGridTextColumn Width="15*" IsReadOnly="False" Header="折扣金额" Binding="{Binding DiscountAmount}"/>
+                <DataGridTextColumn Width="15*" IsReadOnly="False" Header="折扣税额" Binding="{Binding DiscountTaxRateAmount}"/>
+                <DataGridTextColumn Width="15*" IsReadOnly="False" Header="折扣率值" Binding="{Binding DiscountRateValue}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <GroupBox Grid.Row="1" Header="开票信息">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width=" 3*"/>
+                </Grid.ColumnDefinitions>
+                <!--公司信息部分-->
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="0.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" VerticalAlignment="Center">名称:</TextBlock>
+                    <TextBlock Grid.Row="1" VerticalAlignment="Center">纳税人识别号:</TextBlock>
+                    <TextBlock Grid.Row="2" VerticalAlignment="Center">地址:</TextBlock>
+                    <TextBlock Grid.Row="3" VerticalAlignment="Center">电话:</TextBlock>
+                    <TextBlock Grid.Row="4" VerticalAlignment="Center">开户行:</TextBlock>
+                    <TextBlock Grid.Row="5" VerticalAlignment="Center">账号:</TextBlock>
+                    <TextBlock Grid.Row="6" VerticalAlignment="Center">温馨提示:</TextBlock>
+
+                    <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Height="27" Text="{Binding Name}"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="27" Text="{Binding TaxPayerNum}"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Height="27" Text="{Binding Address}"/>
+                    <TextBox Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Height="27" Text="{Binding Phone}"/>
+                    <TextBox Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" Height="27" Text="{Binding BuyerBankName}"/>
+                    <TextBox Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" Height="27" Text="{Binding BuyerBankAccount}"/>
+                    <TextBlock   TextWrapping="WrapWithOverflow" Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" Height="42">
+                                    输入名称、纳税人识别号,点击公司信息按钮可查询历史开过的公司抬头
+                    </TextBlock>
+                    <TextBlock Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2">(必填*)</TextBlock>
+                    <TextBlock Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1">(必填*)</TextBlock>
+                    <TextBlock Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2">(必填*)</TextBlock>
+                    
+                </Grid>
+                <!--公司信息部分-->
+                
+                <!--开票信息操作-->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Height="72" Width="120" Click="btn_ElectronicBlue">开具电子票</Button>
+                    <Button Grid.Column="1" Height="72" Width="120" Click="btn_PaperBlue">开具纸质票</Button>
+                </Grid>
+                <!--开票信息操作-->
+                
+            </Grid>
+        </GroupBox>
+        
+        
+        
+    </Grid>
+</UserControl>

@@ -21,12 +21,14 @@ namespace InvcSys
     internal class PiaotongHelper
     {
         internal static event Action<string> OnHttpPost;
+        internal static HomeWindow HomeWindow;
         /// <summary>
         /// 开具电子蓝票
         /// </summary>
         /// <param name="viewModel"></param>
-        internal static void DrawElectronicBlue(MainViewModel viewModel)
+        internal static void DrawElectronicBlue(BlueViewModel viewModel)
         {
+            
             if (!apiInit())
             {
                 return;
@@ -38,7 +40,7 @@ namespace InvcSys
         /// 开具纸质蓝票
         /// </summary>
         /// <param name="viewModel"></param>
-        internal static void DrawPaperBlue(MainViewModel viewModel)
+        internal static void DrawPaperBlue(BlueViewModel viewModel)
         {
             if (!apiInit())
             {
@@ -52,7 +54,7 @@ namespace InvcSys
         /// 开具电子红票
         /// </summary>
         /// <param name="viewModel"></param>
-        internal static void DrawElectronicRed(MainViewModel viewModel)
+        internal static void DrawElectronicRed(RedViewModel viewModel)
         {
             if (!apiInit())
             {
@@ -66,7 +68,7 @@ namespace InvcSys
         /// 开具纸质红票
         /// </summary>
         /// <param name="viewModel"></param>
-        internal static void DrawPaperRed(MainViewModel viewModel)
+        internal static void DrawPaperRed(RedViewModel viewModel)
         {
             if (!apiInit())
             {
@@ -76,13 +78,38 @@ namespace InvcSys
             postRedJson(viewModel, url,"纸质");
         }
 
+        internal static void QueryPaper(QueryViewModel viewModel)
+        {
+            if (!apiInit())
+            {
+                return;
+            }
+            string url = ConfigurationManager.AppSettings["PaperQuery"];
+            postQueryJson(viewModel, url,"纸质");
+            
+        }
+        internal static void QueryElectronic(QueryViewModel viewModel)
+        {
+            if (!apiInit())
+            {
+                return;
+            }
+            string url = ConfigurationManager.AppSettings["ElectronicQuery"];
+            postQueryJson(viewModel, url, "电子");
+        }
+
+
+
         #region 类私有
         static OpenAPI mApi;
-        static string mcPrefix, mcDesKey;
+        static string mcPrefix, mcDesKey, mcVersion;
         static Logger mLogger;
+
         
         static bool apiInit()
         {
+            HomeWindow.gridMask.Visibility = System.Windows.Visibility.Visible;
+            HomeWindow.tbxDrawStatus.Text = "正在发送开票请求...";
             if (mApi == null)
             {
                 mcDesKey=ConfigurationManager.AppSettings["3DESKey"];
@@ -90,6 +117,7 @@ namespace InvcSys
                 string rsaPublicKey=ConfigurationManager.AppSettings["RSAPublicKey"];
                 string platformCode=ConfigurationManager.AppSettings["platformCode"];
                 mcPrefix = ConfigurationManager.AppSettings["Prefix"];
+                mcVersion = ConfigurationManager.AppSettings["Version"];
 
                 try
                 {
@@ -115,13 +143,20 @@ namespace InvcSys
             return true;
         }
 
-        static void postBlueJson(MainViewModel viewModel,string url,string type)
+        static void postBlueJson(BlueViewModel viewModel,string url,string type)
         {
             InvoiceBlue invoice = new InvoiceBlue();
-            invoice.taxpayerNum = "110101201702071";
+            // 纳税人识别号
+            invoice.taxpayerNum = viewModel.TaxPayerNum;
+            // 发票请求流水号
             invoice.invoiceReqSerialNo = SerialNoHelper.GetInvoiceReqSerialNo(mcPrefix);
             // todo:设置字段
             invoice.buyerName = viewModel.Name;
+            invoice.buyerAddress = viewModel.Address;
+            invoice.buyerTel = viewModel.Phone;
+            invoice.buyerBankName = viewModel.BuyerBankName;
+            invoice.buyerBankAccount = viewModel.BuyerBankAccount;
+            
             // 纸质蓝票的分机号时必填项
             if (type == "纸质")
             {
@@ -130,7 +165,7 @@ namespace InvcSys
             
             List<Goods> goodsList = new List<Goods>();
             
-            foreach (InvoiceItem item in viewModel.InvoiceItems)
+            foreach (BlueGoods item in viewModel.BlueGoodses)
             {
                 // 只添加被选中的项目
                 if (!item.IsSelected)
@@ -140,16 +175,21 @@ namespace InvcSys
                 goodsList.Add(new Goods()
                 {
                     // todo:设置字段值
-                    goodsName = "购买方名称1",
+                    goodsName =item.ArticlesCode,
                     quantity=item.Quantity.ToString(),
                     //quantity ="1.00",
                     unitPrice=item.Price.ToString(),
                     //unitPrice ="56.64",
                     invoiceAmount=item.TransactionAmount.ToString(),
                    // invoiceAmount ="56.64",
-                    includeTaxFlag="1",
-                    taxRateValue="0.13",
-                    taxClassificationCode = "1010101020000000000"
+                    includeTaxFlag=item.IsIncludeTax?"1":"0",
+                    taxRateValue=item.TaxRateValue,
+                    //taxClassificationCode = "1010101020000000000"
+                    taxClassificationCode=item.TaxClassificationCode,
+                    // 折扣部分
+                    discountAmount=item.DiscountAmount,
+                    discountRateValue=item.DiscountRateValue,
+                    discountTaxRateAmount=item.DiscountTaxRateAmount
                 });
             }
             // 项目列表
@@ -170,12 +210,15 @@ namespace InvcSys
             });
         }
 
-        static void postRedJson(MainViewModel viewModel, string url,string type)
+        static void postRedJson(RedViewModel viewModel, string url,string type)
         {
             InvoiceRed invoice = new InvoiceRed();
-            invoice.taxpayerNum = "";
+            invoice.taxpayerNum = viewModel.TaxpayerNum;
             invoice.invoiceReqSerialNo = SerialNoHelper.GetInvoiceReqSerialNo(mcPrefix);
-            // todo：设置字段值
+            invoice.amount = viewModel.Amount;
+            invoice.invoiceCode = viewModel.InvoiceCode;
+            invoice.invoiceNo = viewModel.InvoiceNo;
+            invoice.redReason = viewModel.RedReason;
             
             string content = JsonHelper.Object2String<InvoiceRed>(invoice).Replace("\\","");
             mLogger.Info("红票业务内容JSON串");
@@ -186,6 +229,35 @@ namespace InvcSys
                 if (OnHttpPost != null)
                 {
                     OnHttpPost(type + "红票开票" + rsp.msg);
+                }
+            });
+        }
+
+
+        static void postQueryJson(QueryViewModel viewModel, string url, string type)
+        {
+            InvoiceQuery query = new InvoiceQuery();
+            query.invoiceReqSerialNo = viewModel.InvoiceReqSerialNo;
+            query.taxpayerNum = viewModel.TaxpayerNum;
+            string content = JsonHelper.Object2String<InvoiceQuery>(query).Replace("\\", "");
+            mLogger.Info("查询发票业务内容JSON串");
+
+            Task.Factory.StartNew(() =>
+            {
+                MsgResponse rsp = mApi.PostQueryJson(url, content);
+                Console.WriteLine(rsp.msg);
+                if (OnHttpPost != null)
+                {
+                    OnHttpPost(type + "发票查询" + rsp.msg);
+                }
+                if (rsp.code == "0000")
+                {
+                    viewModel.Code = rsp.QueryContent.code == "0000" ? "开票成功" : rsp.QueryContent.code == "9999" ? "开票中" : "失败";
+                    viewModel.InvoiceDate =rsp.QueryContent.invoiceDate;
+                    viewModel.InvoiceType =rsp.QueryContent.invoiceType == "1" ? "蓝票" : "红票";
+                    viewModel.TradeNo =rsp.QueryContent.tradeNo;
+                    viewModel.InvoiceNo = rsp.QueryContent.invoiceNo;
+                    viewModel.DownloadUrl =rsp.QueryContent.downloadUrl;
                 }
             });
         }

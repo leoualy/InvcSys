@@ -47,5 +47,6 @@ namespace Piaotong.OpenApi
         public string content { get; set; }
 
         public ContentResponse ContentResponse { get; set; }
+        public QueryContent QueryContent { get; set; }
     }
 }

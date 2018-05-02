@@ -63,28 +63,44 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="HomeWindow.xaml.cs">
+      <DependentUpon>HomeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\BillEntity.cs" />
     <Compile Include="Model\RESERVATION_NAME.cs" />
     <Compile Include="PiaotongHelper.cs" />
     <Compile Include="SqlHelper.cs" />
-    <Compile Include="ViewController\MainViewController.xaml.cs">
-      <DependentUpon>MainViewController.xaml</DependentUpon>
+    <Compile Include="StringChecking.cs" />
+    <Compile Include="ViewController\BlueViewController.xaml.cs">
+      <DependentUpon>BlueViewController.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewController\QueryViewController.xaml.cs">
+      <DependentUpon>QueryViewController.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewController\RedViewController.xaml.cs">
+      <DependentUpon>RedViewController.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\BlueViewModel.cs" />
+    <Compile Include="ViewModel\QueryViewModel.cs" />
+    <Compile Include="ViewModel\RedViewModel.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="HomeWindow.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="ViewController\MainViewController.xaml">
+    <Page Include="ViewController\BlueViewController.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewController\QueryViewController.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewController\RedViewController.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

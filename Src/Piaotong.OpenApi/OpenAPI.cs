@@ -16,14 +16,18 @@ namespace Piaotong.OpenApi
             this.mPasswd = passwd;
             this.mPrivateKey = privateKey;
         }
+        public OpenAPI(string version, string passwd, string platformCode, string prefix, string privateKey)
+            : this(passwd, platformCode, prefix, privateKey)
+        {
+            this.mVersion = version;
+        }
         
         string mPrefix;
         string mPasswd;
+        string mVersion = "1.0";
         string mPrivateKey;
         string mPlatformCode;
         
-        
-
         public MsgResponse PostJson(string url, string content)
         {
             MsgResponse rsp = null;
@@ -46,6 +50,28 @@ namespace Piaotong.OpenApi
                 return rsp;
             }
         }
+        public MsgResponse PostQueryJson(string url, string content)
+        {
+            MsgResponse rsp = null;
+            try
+            {
+                string json = BuildRequestJSON(content);
+                string jsonRep = HttpHelper.Post(url, Encoding.UTF8.GetBytes(json));
+                rsp = JsonHelper.String2Object<MsgResponse>(jsonRep);
+                rsp.content = ECB3DES.Decrypt(mPasswd, rsp.content);
+                rsp.QueryContent = JsonHelper.String2Object<QueryContent>(rsp.content);
+                return rsp;
+            }
+            catch (Exception e)
+            {
+                if (rsp == null)
+                {
+                    rsp = new MsgResponse();
+                }
+                rsp.msg = e.Message;
+                return rsp;
+            }
+        }
 
         #region 私有
         string BuildRequestJSON(string content)
@@ -55,7 +81,7 @@ namespace Piaotong.OpenApi
             msg.Add("platformCode", mPlatformCode);
             msg.Add("signType", "RSA");
             msg.Add("format", "JSON");
-            msg.Add("version", "1.0");
+            msg.Add("version", this.mVersion);
             try
             {
                 msg.Add("content", ECB3DES.Encrypt(mPasswd, content));
