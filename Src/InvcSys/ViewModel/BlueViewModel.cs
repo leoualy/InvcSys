@@ -61,6 +61,10 @@ be.Res_RowID=rname.resv_name_id and rname.resv_name_id=@resv_name_id";
 
             DataTable dt = SqlHelper.ExecDQLForDataTable(sql,
                 new List<IDataParameter>() { SqlHelper.CreateDataParameter("@resv_name_id",RESV_Name_ID) });
+            if (dt == null || dt.Rows.Count <= 0)
+            {
+                return;
+            }
             foreach (DataRow dr in dt.Rows)
             {
                 BlueGoods goodes = SqlHelper.Row2Model<BlueGoods>(dr);
@@ -68,6 +72,7 @@ be.Res_RowID=rname.resv_name_id and rname.resv_name_id=@resv_name_id";
                 goodes.TaxClassificationCode = "1010101020000000000";
                 mBlueGoodses.Add(goodes);
             }
+
 
             Name = dt.Rows[0]["company"].ToString();
             Address = dt.Rows[0]["address"].ToString();
