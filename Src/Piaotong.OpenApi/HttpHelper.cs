@@ -25,7 +25,7 @@ namespace Piaotong.OpenApi
             rq.Method = "POST";
             rq.ContentType = "application/json";
             rq.ContentLength = content.Length;
-            // 超时值为50毫秒
+            // 超时值为120毫秒
             rq.Timeout = 120000;
             try
             {
