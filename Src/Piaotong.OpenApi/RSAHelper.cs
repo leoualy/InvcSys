@@ -47,7 +47,6 @@ namespace Piaotong.OpenApi
                 signer.Init(true, privateKeyParam);//参数为true验签，参数为false加签  
                 var dataByte = Encoding.UTF8.GetBytes(content);
                 signer.BlockUpdate(dataByte, 0, dataByte.Length);
-                //return Encoding.GetEncoding(encoding).GetString(signer.GenerateSignature()); //签名结果 非Base64String  
                 return Convert.ToBase64String(signer.GenerateSignature()); 
             }
             catch(Exception e)
