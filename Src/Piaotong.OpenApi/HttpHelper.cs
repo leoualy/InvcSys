@@ -26,7 +26,7 @@ namespace Piaotong.OpenApi
             rq.ContentType = "application/json";
             rq.ContentLength = content.Length;
             // 超时值为50毫秒
-            rq.Timeout = 50000;
+            rq.Timeout = 120000;
             try
             {
                 using (Stream s = rq.GetRequestStream())

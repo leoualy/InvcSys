@@ -1,4 +1,11 @@
-﻿using System;
+﻿/***************************************************************************
+ * 文件名:             RSAHelper.cs
+ * 作者：              Liuy
+ * 日期：              2018-04-15
+ * 描述：              RSA 加签验签
+***************************************************************************/
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,29 +26,36 @@ using Org.BouncyCastle.Crypto.Engines;
 
 namespace Piaotong.OpenApi
 {
-    public class RSAHelper
+    internal class RSAHelper
     {
+        #region 使用java提供的密钥对进行加签验签
+        static readonly string Sign_Algorithm = "SHA1WITHRSA";
         /// <summary>
         /// RSA加签
         /// </summary>
         /// <param name="content"></param>
         /// <param name="privateKey"></param>
         /// <returns></returns>
-        public static string Sign(string content, string privateKey)
+        internal static string SignByJavaPrivateKey(string content, string javaPrivateKey)
         {
             try
             {
-                RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-                rsa.FromXmlString(privateKey);
-                SHA1 sh = new SHA1CryptoServiceProvider();
-                byte[] bytesSigned = rsa.SignData(Encoding.UTF8.GetBytes(content), sh);
+                RsaKeyParameters privateKeyParam = (RsaKeyParameters)PrivateKeyFactory.CreateKey(
+                Convert.FromBase64String(javaPrivateKey));
 
-                return Convert.ToBase64String(bytesSigned);
+                ISigner signer = SignerUtilities.GetSigner(Sign_Algorithm);
+                signer.Init(true, privateKeyParam);//参数为true验签，参数为false加签  
+                var dataByte = Encoding.UTF8.GetBytes(content);
+                signer.BlockUpdate(dataByte, 0, dataByte.Length);
+                //return Encoding.GetEncoding(encoding).GetString(signer.GenerateSignature()); //签名结果 非Base64String  
+                return Convert.ToBase64String(signer.GenerateSignature()); 
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 throw new Exception("数据加签时出错:" + e.Message);
             }
+            
+
         }
 
         /// <summary>
@@ -49,20 +63,53 @@ namespace Piaotong.OpenApi
         /// </summary>
         /// <param name="content"></param>
         /// <param name="signedString"></param>
-        /// <param name="publicKey"></param>
+        /// <param name="javaPublicKey"></param>
         /// <returns></returns>
-        public static bool Verify(string content, string signedString, string publicKey)
+        internal static bool VerifyByJavaPublicKey(string content, string signedString, string javaPublicKey)
         {
-            byte[] Data = Encoding.UTF8.GetBytes(content);
-            byte[] data = Convert.FromBase64String(signedString);
-            RSAParameters paraPub = ConvertFromPublicKey(publicKey);
-            RSACryptoServiceProvider rsaPub = new RSACryptoServiceProvider();
-            rsaPub.ImportParameters(paraPub);
+            try
+            {
+                RsaKeyParameters publicKeyParam = (RsaKeyParameters)PublicKeyFactory.CreateKey(Convert.FromBase64String(javaPublicKey));
+                ISigner signer = SignerUtilities.GetSigner(Sign_Algorithm);
+                signer.Init(false, publicKeyParam);
+                byte[] dataByte = Encoding.UTF8.GetBytes(content);
+                signer.BlockUpdate(dataByte, 0, dataByte.Length);
 
-            SHA1 sh = new SHA1CryptoServiceProvider();
-            return rsaPub.VerifyData(data, sh, Data);
+                byte[] signatureByte = Convert.FromBase64String(signedString);
+                return signer.VerifySignature(signatureByte);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("数据验签时出错:" + e.Message);
+            }
         }
 
+        #endregion 使用java提供的密钥对进行加签验签
+        /// <summary>
+        /// 生成明文的待加签串
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <returns></returns>
+        internal static string GenerateSignContent(Dictionary<string, string> hash)
+        {
+            List<string> keys = hash.Keys.ToList();
+            keys.Sort();
+            StringBuilder builder = new StringBuilder();
+            string val;
+            for (int i = 0; i < keys.Count; i++)
+            {
+                hash.TryGetValue(keys[i], out val);
+                builder.Append(string.Format("{0}={1}", keys[i], val));
+                if (i < keys.Count - 1)
+                {
+                    builder.Append("&");
+                }
+            }
+            return builder.ToString();
+        }
+
+
+        #region 暂时未使用的方法
         private static RSAParameters ConvertFromPublicKey(string pemFileConent)
         {
 
@@ -137,5 +184,8 @@ namespace Piaotong.OpenApi
             byte[] inArray = formatter.CreateSignature(rgbHash);
             return Convert.ToBase64String(inArray);
         }
+        #endregion 暂时未使用的方法
+
+
     }
 }

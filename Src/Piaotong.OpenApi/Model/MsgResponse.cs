@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,51 @@ namespace Piaotong.OpenApi
         /// 二维码图片 Base64 必填
         /// </summary>
         public string qrCode { get; set; }
+    }
+
+    public class QueryContent
+    {
+        public string taxpayerNum { get; set; }
+        public string invoiceReqSerialNo { get; set; }
+        public string invoiceType { get; set; }
+
+        public string code { get; set; }
+        public string msg { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string tradeNo { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string securityCode { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string qrCode { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string invoiceCode { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string invoiceNo { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string invoiceDate { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string noTaxAmount { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string taxAmount { get; set; }
+
+        #region 纸质发票查询响应报文项
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string invoiceKindCode { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string cipherText { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string diskNo { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string definedData { get; set; }
+        #endregion 纸质发票查询响应报文项
+
+        #region 电子发票查询响应报文项
+        public string invoicePdf { get; set; }
+        public string downloadUrl { get; set; }
+        #endregion 电子发票查询响应报文项
+
+
     }
 
 

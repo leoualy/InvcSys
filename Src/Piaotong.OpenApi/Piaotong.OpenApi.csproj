@@ -54,11 +54,10 @@
     <Compile Include="Model\InvoiceRed.cs" />
     <Compile Include="JsonHelper.cs" />
     <Compile Include="Model\MsgResponse.cs" />
-    <Compile Include="Model\QueryResponse.cs" />
     <Compile Include="OpenAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RSAHelper.cs" />
-    <Compile Include="ECB3DES.cs" />
+    <Compile Include="DESHelper.cs" />
     <Compile Include="SerialNoHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/***************************************************************************
+ * 文件名:             SerialNoHelper.cs
+ * 作者：              Liuy
+ * 日期：              2018-04-15
+ * 描述：              序列号生成工具
+***************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +27,12 @@ namespace Piaotong.OpenApi
             
             return string.Format("{0}{1}{2}", prefix, DateTime.Now.ToString("yyyyMMddHHmmss"),val);
         }
+
+        /// <summary>
+        /// 生成发票请求流水号
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
         public static string GetInvoiceReqSerialNo(string prefix)
         {
             Random rand = CreateRandom();

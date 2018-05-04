@@ -33,10 +33,7 @@ namespace InvcSys
 
                 try
                 {
-                    // 当前私钥时java格式的，所以需要转化为.net 形式的
-                    string csPrivateKey = RSAHelper.PrivateKeyJava2Dotnet(rsaPrivateKey);
-
-                    mApi = new OpenAPI(mcDesKey, platformCode, mcPrefix, csPrivateKey);
+                    mApi = new OpenAPI(mcDesKey, platformCode, mcPrefix, rsaPrivateKey,rsaPublicKey);
                     mLogger = LogManager.GetCurrentClassLogger();
                 }
                 catch (Exception e)
