@@ -20,6 +20,52 @@ namespace InvcSys
             mDownloadUrl = "http://";
             mCode = "无";
         }
+        public string QueryElectric()
+        {
+            string ret = checkQuery();
+            if (ret != null)
+            {
+                return ret;
+            }
+            HomeWindow.ShowDrawStatus();
+            PiaotongHelper.QueryElectronic(this);
+
+            return null;
+        }
+        public string QueryPaper()
+        {
+            string ret = checkQuery();
+            if (ret != null)
+            {
+                return ret;
+            }
+            HomeWindow.ShowDrawStatus();
+            PiaotongHelper.QueryPaper(this);
+            return null;
+        }
+        string checkQuery()
+        {
+            if (string.IsNullOrWhiteSpace(this.InvoiceReqSerialNo))
+            {
+                return "发票请求序列号不能为空";
+            }
+            if (string.IsNullOrWhiteSpace(this.TaxpayerNum))
+            {
+                return "纳税人识别号不能为空";
+            }
+            if (!StringChecking.TaxpayerNum(this.TaxpayerNum))
+            {
+                return "纳税人识别号格式错误,必须为15-20位的大写字母或者数字";
+            }
+            if (!StringChecking.InvoiceReqSerialNo(this.InvoiceReqSerialNo))
+            {
+                return "请求流水号格式错误,必须为20位的字母或者数字";
+            }
+            return null;
+        }
+
+
+
         string mTaxpayerNum;
 
         public string TaxpayerNum
