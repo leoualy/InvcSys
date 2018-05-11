@@ -61,12 +61,17 @@ namespace InvcSys
             postBlueJson(viewModel, url, "电子");
         }
         /// <summary>
-        /// 开具纸质蓝票
+        /// 开具纸质普票
         /// </summary>
         /// <param name="viewModel"></param>
-        internal static void DrawPaperBlue(BlueViewModel viewModel)
+        internal static void DrawPaperCommon(BlueViewModel viewModel)
         {
             string url = ConfigurationManager.AppSettings["PaperBlue"];
+            postBlueJson(viewModel, url, "纸质");
+        }
+        internal static void DrawPaperSpecial(BlueViewModel viewModel)
+        {
+            string url = ConfigurationManager.AppSettings["PaperSpecial"];
             postBlueJson(viewModel, url, "纸质");
         }
         
@@ -116,12 +121,18 @@ namespace InvcSys
             invoice.taxpayerNum = viewModel.TaxPayerNum;
             // 发票请求流水号
             invoice.invoiceReqSerialNo = SerialNoHelper.GetInvoiceReqSerialNo(mcPrefix);
-            // todo:设置字段
-            invoice.buyerName = viewModel.Name;
-            invoice.buyerAddress = viewModel.Address;
-            invoice.buyerTel = viewModel.Phone;
+
+            invoice.buyerName = viewModel.BuyerName;
+            invoice.buyerAddress = viewModel.BuyerAddress;
+            invoice.buyerTel = viewModel.BuyerTel;
             invoice.buyerBankName = viewModel.BuyerBankName;
             invoice.buyerBankAccount = viewModel.BuyerBankAccount;
+            invoice.buyerTaxpayerNum = viewModel.TaxPayerNum;
+
+            invoice.sellerAddress = viewModel.SellerAddress;
+            invoice.sellerBankAccount = viewModel.SellerBankAccount;
+            invoice.sellerBankName = viewModel.SellerBankName;
+            invoice.sellerTel = viewModel.SellerTel;
             
             // 纸质蓝票的分机号时必填项
             if (type == "纸质")
@@ -140,8 +151,7 @@ namespace InvcSys
                 }
                 goodsList.Add(new Goods()
                 {
-                    // todo:设置字段值
-                    goodsName =item.ArticlesCode,
+                    goodsName =item.Description,
                     quantity=item.Quantity.ToString(),
                     //quantity ="1.00",
                     unitPrice=item.Price.ToString(),
@@ -149,8 +159,13 @@ namespace InvcSys
                     invoiceAmount=item.TransactionAmount.ToString(),
                    // invoiceAmount ="56.64",
                     includeTaxFlag=item.IsIncludeTax?"1":"0",
-                    taxRateValue=item.TaxRateValue,
-                    //taxClassificationCode = "1010101020000000000"
+                    taxRateValue=item.TaxRate.ToString(),
+                    // 0税率处理
+                    zeroTaxFlag=item.TaxRate==0?"1":null,
+                    // 税额的计算
+                    taxRateAmount=Convert.ToDouble((item.TaxRateAmount==0?
+                    TaxHelper.GetTaxAmount(item.Quantity,item.Price,item.TaxRate):item.TaxRateAmount)).ToString(),
+                    
                     taxClassificationCode=item.TaxClassificationCode,
                     // 折扣部分
                     discountAmount=item.DiscountAmount,

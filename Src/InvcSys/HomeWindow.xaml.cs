@@ -21,22 +21,36 @@ namespace InvcSys
     /// </summary>
     public partial class HomeWindow : Window
     {
+        
         public HomeWindow()
         {
             InitializeComponent();
             this.Loaded += HomeWindow_Loaded;
         }
 
+        
         void HomeWindow_Loaded(object sender, RoutedEventArgs e)
         {
             this.tabBlue.Content = new BlueViewController();
             this.tabRed.Content = new RedViewController();
             this.tabQuery.Content = new QueryViewController();
+            this.tabTax.Content = new TaxViewController();
             mcGridMask = this.gridMask;
             mcTbxStatus = this.tbxDrawStatus;
             gridMask.Visibility = Visibility.Collapsed;
 
             PiaotongHelper.OnHttpPost += PiaotongHelper_OnHttpPost;
+            // 启动api服务
+            try
+            {
+                ApiServer.Start();  
+            }
+            catch(Exception eStart)
+            {
+                MessageBox.Show(eStart.Message);
+                return;
+            }
+            DataManager.RegistHomeWindow(this);
         }
 
         void PiaotongHelper_OnHttpPost(string obj)

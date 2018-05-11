@@ -29,34 +29,20 @@ namespace InvcSys.ViewController
         RedViewModel mViewModel;
         private void btn_Electronic(object sender, RoutedEventArgs e)
         {
-            if (!tbxCheck())
+            string ret = mViewModel.DrawElectricRed();
+            if (!string.IsNullOrWhiteSpace(ret))
             {
-                MessageBox.Show("请检查必填项");
-                return;
+                MessageBox.Show(ret);
             }
-            if (!StringChecking.TaxpayerNum(mViewModel.TaxpayerNum))
-            {
-                MessageBox.Show("纳税人识别号格式错误,必须为15-20位的大写字母或者数字");
-                return;
-            }
-            HomeWindow.ShowDrawStatus();
-            PiaotongHelper.DrawElectronicRed(mViewModel);
         }
 
         private void btn_Paper(object sender, RoutedEventArgs e)
         {
-            if (!tbxCheck())
+            string ret = mViewModel.DrawPaperRed();
+            if (!string.IsNullOrWhiteSpace(ret))
             {
-                MessageBox.Show("请检查必填项");
-                return;
+                MessageBox.Show(ret);
             }
-            if (!StringChecking.TaxpayerNum(mViewModel.TaxpayerNum))
-            {
-                MessageBox.Show("纳税人识别号格式错误,必须为15-20位的大写字母或者数字");
-                return;
-            }
-            HomeWindow.ShowDrawStatus();
-            PiaotongHelper.DrawPaperRed(mViewModel);
         }
 
         bool tbxCheck()

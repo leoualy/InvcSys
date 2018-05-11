@@ -49,6 +49,7 @@
                 <TabItem Header="蓝票" Name="tabBlue" Height="25" Width="80"/>
                 <TabItem Header="红票" Name="tabRed" Height="25" Width="80"/>
                 <TabItem Header="发票查询" Name="tabQuery" Height="25" Width="80"/>
+                <TabItem Header="税率配置" Name="tabTax"/>
             </TabControl>
             <!--遮罩部分-->
             <Grid Grid.Row="1" Grid.ColumnSpan="2" Name="gridMask">
@@ -63,7 +64,7 @@
                         </Grid.ColumnDefinitions>
                         <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="0,0,1,0" Height="56"></Border>
                         <TextBlock Foreground="#5B5B5B" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center">开票状态</TextBlock>
-                        <TextBlock FontSize="15" Name="tbxDrawStatus" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
+                        <TextBlock FontSize="15" Name="tbxDrawStatus" Margin="10,2" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
                     </Grid>
                 </Border>
 

@@ -18,7 +18,6 @@ namespace InvcSys
         internal static decimal GetTaxAmount(int quantity, decimal price, decimal taxRate)
         {
             decimal amount = decimal.Multiply(quantity, price);
-            //return decimal.Add(amount, decimal.Multiply(amount, taxRate));
             return decimal.Multiply(amount, taxRate);
         }
     }

@@ -30,73 +30,39 @@ namespace InvcSys.ViewController
         void BlueViewController_Loaded(object sender, RoutedEventArgs e)
         {
             mBlueViewModel = new BlueViewModel();
-            mBlueViewModel.LoadBlueGoodses();
             
             this.DataContext = mBlueViewModel;
+            // 向数据管理类注册viewmodel
+            DataManager.RegistData(mBlueViewModel);
         }
         BlueViewModel mBlueViewModel;
 
         private void btn_ElectronicBlue(object sender, RoutedEventArgs e)
         {
-            if (!tbxCheck())
+            string ret = mBlueViewModel.DrawElectricCommon();
+            if (!string.IsNullOrWhiteSpace(ret))
             {
-                MessageBox.Show("请检查必填项");
-                return;
+                MessageBox.Show(ret);
             }
-            if (!StringChecking.TaxpayerNum(mBlueViewModel.TaxPayerNum))
-            {
-                MessageBox.Show("纳税人识别号格式错误,必须为15-20位的大写字母或者数字");
-                return;
-            }
-
-
-            var itemsSelected = mBlueViewModel.BlueGoodses.Where(m => m.IsSelected);
-            
-            if (itemsSelected == null || itemsSelected.Count() <= 0)
-            {
-                MessageBox.Show("请选择开票项目");
-                return;
-            }
-            HomeWindow.ShowDrawStatus();
-            PiaotongHelper.DrawElectronicBlue(mBlueViewModel);
         }
 
         private void btn_PaperBlue(object sender, RoutedEventArgs e)
         {
-            if (!tbxCheck())
+            string ret = mBlueViewModel.DrawPaperCommon();
+            if (!string.IsNullOrWhiteSpace(ret))
             {
-                MessageBox.Show("请检查必填项");
-                return;
+                MessageBox.Show(ret);
             }
-            if (!StringChecking.TaxpayerNum(mBlueViewModel.TaxPayerNum))
-            {
-                MessageBox.Show("纳税人识别号格式错误,必须为15-20位的大写字母或者数字");
-                return;
-            }
-
-            var itemsSelected = mBlueViewModel.BlueGoodses.Where(m => m.IsSelected);
             
-            if (itemsSelected == null || itemsSelected.Count() <= 0)
-            {
-                MessageBox.Show("请选择开票项目");
-                return;
-            }
-            HomeWindow.ShowDrawStatus();
-            PiaotongHelper.DrawPaperBlue(mBlueViewModel);
         }
 
-        bool tbxCheck()
+        private void btn_PaperSpecial(object sender, RoutedEventArgs e)
         {
-            if (mBlueViewModel.Name == ""||mBlueViewModel.Name==null||
-                mBlueViewModel.TaxPayerNum==""||mBlueViewModel.TaxPayerNum==null)
+            string ret = mBlueViewModel.DrawPaperSpecial();
+            if (!string.IsNullOrWhiteSpace(ret))
             {
-                return false;
+                MessageBox.Show(ret);
             }
-            return true;
-            
         }
-        
-
-        
     }
 }

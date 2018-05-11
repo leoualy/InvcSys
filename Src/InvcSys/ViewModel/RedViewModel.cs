@@ -17,6 +17,62 @@ namespace InvcSys
             mRedReason = "冲红";
             mAmount = "-56.64";
         }
+
+        public string DrawElectricRed()
+        {
+            string ret = checkRed();
+            if (!string.IsNullOrWhiteSpace(ret))
+            {
+                return ret;
+            }
+            HomeWindow.ShowDrawStatus();
+            PiaotongHelper.DrawElectronicRed(this);
+            return null;
+        }
+        public string DrawPaperRed()
+        {
+            string ret = checkRed();
+            if (!string.IsNullOrWhiteSpace(ret))
+            {
+                return ret;
+            }
+            HomeWindow.ShowDrawStatus();
+            PiaotongHelper.DrawPaperRed(this);
+            return null;
+        }
+
+        string checkRed()
+        {
+            if (string.IsNullOrWhiteSpace(this.InvoiceCode))
+            {
+                return "发票代码不能为空";
+            }
+            if (string.IsNullOrWhiteSpace(this.InvoiceNo))
+            {
+                return "发票号码不能为空";
+            }
+            if (string.IsNullOrWhiteSpace(this.TaxpayerNum))
+            {
+                return "纳税人识别号不能为空";
+            }
+            if (string.IsNullOrWhiteSpace(this.RedReason))
+            {
+                return "冲红原因不能为空";
+            }
+            if (string.IsNullOrWhiteSpace(this.Amount))
+            {
+                return "价税合计金额不能为空";
+            }
+            if (!StringChecking.TaxpayerNum(this.TaxpayerNum))
+            {
+                return "纳税人识别号格式错误,必须为15-20位的大写字母或者数字";
+            }
+            return null;
+
+        }
+
+
+
         string mInvoiceCode;
         public string InvoiceCode
         {
@@ -80,5 +136,9 @@ namespace InvcSys
                 OnPropertyChanged("RedReason");
             }
         }
+
+
+
+        
     }
 }

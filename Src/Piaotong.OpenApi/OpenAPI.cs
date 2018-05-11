@@ -87,11 +87,12 @@ namespace Piaotong.OpenApi
             try
             {
                 string json = BuildRequestJSON(content);
-                string jsonRep = HttpHelper.Post(url, Encoding.UTF8.GetBytes(json));
-                rsp = JsonHelper.String2Object<MsgResponse>(jsonRep);
-                Dictionary<string, string> dic = JsonHelper.String2Object<Dictionary<string, string>>(jsonRep);
-
+                string jsonRsp = HttpHelper.Post(url, Encoding.UTF8.GetBytes(json));
+                rsp = JsonHelper.String2Object<MsgResponse>(jsonRsp);
+                Dictionary<string, string> dic = JsonHelper.String2Object<Dictionary<string, string>>(jsonRsp);
+                // 移除签名串
                 dic.Remove("sign");
+                // 根据响应返回的数据构建新的签名串
                 string contentResp = RSAHelper.GenerateSignContent(dic);
                 // 验签结果
                 bool ret = RSAHelper.VerifyByJavaPublicKey(contentResp, rsp.sign, mPublicKey);

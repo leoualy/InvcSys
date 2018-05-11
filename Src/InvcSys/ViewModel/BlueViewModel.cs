@@ -23,7 +23,7 @@ namespace InvcSys
         }
         // 是否含税
         public bool IsIncludeTax { get; set; }
-        public string ArticlesCode { get; set; }
+        public string Description { get; set; }
         public int Quantity { get; set; }
         //单价
         public decimal Price { get; set; }
@@ -31,12 +31,13 @@ namespace InvcSys
         public string MeteringUnit { get; set; }
         // 金额
         public decimal TransactionAmount { get; set; }
+        //string taxClassificationCode;
         // 税收分类代码
         public string TaxClassificationCode { get; set; }
         // 税率
-        public string TaxRateValue { get; set; }
+        public decimal TaxRate { get; set; }
         // 税额
-        public string TaxRateAmount { get; set; }
+        public decimal TaxRateAmount { get; set; }
         // 折扣金额
         public string DiscountAmount { get; set; }
         // 折扣税额
@@ -46,39 +47,156 @@ namespace InvcSys
     }
     public class BlueViewModel:ViewModel
     {
-        // erp传过来的参数
-        internal static string RESV_Name_ID;
         public BlueViewModel()
         {
             mBlueGoodses = new List<BlueGoods>();
         }
+        #region sql
+        // 查询购买方公司信息
+        string resSql = @"select RN.company,RN.address,RN.phone,P.email from RESERVATION_NAME RN,PROFILE P 
+where RN.resv_name_id=@resv_name_id and RN.name_id=P.name_id";
+        // 消费统计sql
+        string billSql = @"select TCE.Description,TCTR.TaxRate,TCTR.TaxClassificationCode,BE.Price,
+SUM(BE.Quantity)as Quantity ,SUM(BE.TransactionAmount)as TransactionAmount
+from BillEntity BE,TransationCodesEntity TCE,TrnCodeTaxRate TCTR 
+where BE.Res_RowID=@resv_name_id and BE.Window=@Window and BE.Price>0 and BE.Quantity>0 and 
+TCE.Trn_Code=BE.TransactionCode and TCTR.TrnCode=BE.TransactionCode
+group by TCE.Description,TCTR.TaxRate,TCTR.TaxClassificationCode,BE.Price";
+        #endregion sql
 
-        public void LoadBlueGoodses()
+
+        public void UpdateData(int id, int window)
         {
-            string sql = @"select rname.company,rname.address,rname.phone,
-be.* from RESERVATION_NAME rname,BillEntity be where 
-be.Res_RowID=rname.resv_name_id and rname.resv_name_id=@resv_name_id";
+            DataTable resDt = SqlHelper.ExecDQLForDataTable(resSql, new List<IDataParameter>(){
+                SqlHelper.CreateDataParameter("@resv_name_id",id)
+            });
+            List<IDataParameter> billParams = new List<IDataParameter>() 
+            { 
+                SqlHelper.CreateDataParameter("@resv_name_id",id),
+                SqlHelper.CreateDataParameter("@Window",window) 
+            };
 
-            DataTable dt = SqlHelper.ExecDQLForDataTable(sql,
-                new List<IDataParameter>() { SqlHelper.CreateDataParameter("@resv_name_id",RESV_Name_ID) });
+            DataTable dt = SqlHelper.ExecDQLForDataTable(billSql, billParams);
             if (dt == null || dt.Rows.Count <= 0)
             {
                 return;
             }
+            List<BlueGoods> goods = new List<BlueGoods>();
             foreach (DataRow dr in dt.Rows)
             {
                 BlueGoods goodes = SqlHelper.Row2Model<BlueGoods>(dr);
-                goodes.TaxRateValue = "0.13";
-                goodes.TaxClassificationCode = "1010101020000000000";
-                mBlueGoodses.Add(goodes);
+                goodes.TaxRateAmount = TaxHelper.GetTaxAmount(goodes.Quantity, goodes.Price, goodes.TaxRate);
+                goods.Add(goodes);
             }
 
-
-            Name = dt.Rows[0]["company"].ToString();
-            Address = dt.Rows[0]["address"].ToString();
-            Phone = dt.Rows[0]["phone"].ToString();
+            BlueGoodses = goods;
+            BuyerName = resDt.Rows[0]["company"].ToString();
+            BuyerAddress = resDt.Rows[0]["address"].ToString();
+            BuyerTel = resDt.Rows[0]["phone"].ToString();
+            BuyerEmail = resDt.Rows[0]["email"].ToString();
+            
             // 待修改
             TaxPayerNum = "110101201702071";
+        }
+
+        public string DrawElectricCommon()
+        {
+            string ret = checkCommon();
+            if (ret != null)
+            {
+                return ret;
+            }
+            HomeWindow.ShowDrawStatus();
+            PiaotongHelper.DrawElectronicBlue(this);
+            return ret;
+        }
+        public string DrawPaperCommon()
+        {
+            string ret = checkCommon();
+            if (ret != null)
+            {
+                return ret;
+            }
+            HomeWindow.ShowDrawStatus();
+            PiaotongHelper.DrawPaperCommon(this);
+            return ret;
+        }
+
+        public string DrawPaperSpecial()
+        {
+            string ret = checkSpecial();
+            if (ret != null)
+            {
+                return ret;
+            }
+            HomeWindow.ShowDrawStatus();
+            PiaotongHelper.DrawPaperSpecial(this);
+
+            return null;
+        }
+
+
+        string checkCommon()
+        {
+            if (string.IsNullOrWhiteSpace(this.BuyerName))
+            {
+                return "公司名称不能为空";
+            }
+            if (string.IsNullOrWhiteSpace(this.TaxPayerNum))
+            {
+                return "纳税人识别号不能为空";
+            }
+            if (!StringChecking.TaxpayerNum(this.TaxPayerNum))
+            {
+                return "纳税人识别号格式错误,必须为15-20位的大写字母或者数字";
+            }
+            var selectTmp = this.BlueGoodses.Where(m => m.IsSelected);
+            if (selectTmp == null || selectTmp.Count() <= 0)
+            {
+                return "请至少选择一个开票项";
+            }
+            return null;
+        }
+        string checkSpecial()
+        {
+            string ret = checkCommon();
+            if (ret != null)
+            {
+                return ret;
+            }
+            if (string.IsNullOrWhiteSpace(this.SellerAddress))
+            {
+                return "销货方地址不能为空";
+            }
+            if (string.IsNullOrWhiteSpace(this.SellerBankAccount))
+            {
+                return "销货方银行账户不能为空";
+            }
+            if (string.IsNullOrWhiteSpace(this.SellerBankName))
+            {
+                return "销货方开户行名称不能为空";
+            }
+            if (string.IsNullOrWhiteSpace(this.SellerTel))
+            {
+                return "销货方电话不能为空";
+            }
+            if (string.IsNullOrWhiteSpace(this.BuyerBankAccount))
+            {
+                return "购货方银行账号不能为空";
+            }
+            if (string.IsNullOrWhiteSpace(this.BuyerBankName))
+            {
+                return "购货方开户行名称不能为空";
+            }
+            if (string.IsNullOrWhiteSpace(this.BuyerAddress))
+            {
+                return "购货方地址不能为空";
+            }
+            if (string.IsNullOrWhiteSpace(this.BuyerTel))
+            {
+                return "购货方电话不能为空";
+            }
+            return null;
         }
 
 
@@ -93,16 +211,17 @@ be.Res_RowID=rname.resv_name_id and rname.resv_name_id=@resv_name_id";
             }
         }
 
-        string name;
-        public string Name
+        string mBuyerName;
+        public string BuyerName
         {
-            get { return name; }
+            get { return mBuyerName; }
             set
             {
-                name = value;
-                OnPropertyChanged("Name");
+                mBuyerName = value;
+                OnPropertyChanged("BuyerName");
             }
         }
+
 
         string taxPayerNum;
         public string TaxPayerNum
@@ -115,30 +234,51 @@ be.Res_RowID=rname.resv_name_id and rname.resv_name_id=@resv_name_id";
             }
         }
 
-        string address;
-        public string Address
+        
+        string mBuyerAddress;
+        public string BuyerAddress
         {
-            get { return address; }
+            get { return mBuyerAddress; }
             set
             {
-                address = value;
-                OnPropertyChanged("Address");
+                mBuyerAddress = value;
+                OnPropertyChanged("BuyerAddress");
             }
         }
-        string phone;
-        public string Phone
+
+        string mBuyerTel;
+        public string BuyerTel
         {
-            get { return phone; }
+            get { return mBuyerTel; }
             set
             {
-                phone = value;
-                OnPropertyChanged("Phone");
+                mBuyerTel = value;
+                OnPropertyChanged("BuyerTel");
             }
         }
+
+
+        string mBuyerEmail;
+        public string BuyerEmail
+        {
+            get { return mBuyerEmail; }
+            set
+            {
+                mBuyerEmail = value;
+                OnPropertyChanged("BuyerEmail");
+            }
+        }
+
+
+
         // 开户行
         public string BuyerBankName { get; set; }
         // 开户行账号
         public string BuyerBankAccount { get; set; }
+        public string SellerAddress { get; set; }
+        public string SellerTel { get; set; }
+        public string SellerBankName { get; set; }
+        public string SellerBankAccount { get; set; }
 
     }
 }
