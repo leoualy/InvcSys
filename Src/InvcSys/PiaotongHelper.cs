@@ -168,9 +168,9 @@ namespace InvcSys
                     
                     taxClassificationCode=item.TaxClassificationCode,
                     // 折扣部分
-                    discountAmount=item.DiscountAmount,
-                    discountRateValue=item.DiscountRateValue,
-                    discountTaxRateAmount=item.DiscountTaxRateAmount
+                    //discountAmount=item.DiscountAmount,
+                    //discountRateValue=item.DiscountRateValue,
+                    //discountTaxRateAmount=item.DiscountTaxRateAmount
                 });
             }
             // 项目列表

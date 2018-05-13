@@ -31,56 +31,21 @@ namespace InvcSys.ViewController
 
         private void btn_queryPaper(object sender, RoutedEventArgs e)
         {
-            if (!tbxCheck())
+            string ret = mQueryViewModel.QueryPaper();
+            if (!string.IsNullOrWhiteSpace(ret))
             {
-                MessageBox.Show("请检查必填项");
-                return;
+                MessageBox.Show(ret);
             }
-
-            if (!StringChecking.TaxpayerNum(mQueryViewModel.TaxpayerNum))
-            {
-                MessageBox.Show("纳税人识别号格式错误,必须为15-20位的大写字母或者数字");
-                return;
-            }
-            if (!StringChecking.InvoiceReqSerialNo(mQueryViewModel.InvoiceReqSerialNo))
-            {
-                MessageBox.Show("请求流水号格式错误,必须为20位的字母或者数字");
-                return;
-            }
-
-            HomeWindow.ShowDrawStatus();
-            PiaotongHelper.QueryPaper(mQueryViewModel);
         }
 
         private void btn_queryElectronic(object sender, RoutedEventArgs e)
         {
-            if (!tbxCheck())
+            string ret = mQueryViewModel.QueryElectric();
+            if (!string.IsNullOrWhiteSpace(ret))
             {
-                MessageBox.Show("请检查必填项");
-                return;
+                MessageBox.Show(ret);
             }
-
-            if (!StringChecking.TaxpayerNum(mQueryViewModel.TaxpayerNum))
-            {
-                MessageBox.Show("纳税人识别号格式错误,必须为15-20位的大写字母或者数字");
-                return;
-            }
-            if (!StringChecking.InvoiceReqSerialNo(mQueryViewModel.InvoiceReqSerialNo))
-            {
-                MessageBox.Show("请求流水号格式错误,必须为20位的字母或者数字");
-                return;
-            }
-            HomeWindow.ShowDrawStatus();
-            PiaotongHelper.QueryElectronic(mQueryViewModel);
         }
-        bool tbxCheck()
-        {
-            if(mQueryViewModel.InvoiceReqSerialNo==""
-                || mQueryViewModel.TaxpayerNum == "")
-            {
-                return false;
-            }
-            return true;
-        }
+        
     }
 }

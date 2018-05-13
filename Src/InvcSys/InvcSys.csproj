@@ -85,6 +85,7 @@
       <DependentUpon>HomeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BillEntity.cs" />
+    <Compile Include="Model\BlueModel.cs" />
     <Compile Include="Model\RESERVATION_NAME.cs" />
     <Compile Include="PiaotongHelper.cs" />
     <Compile Include="SqlHelper.cs" />

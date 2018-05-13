@@ -38,13 +38,12 @@ namespace InvcSys
         public decimal TaxRate { get; set; }
         // 税额
         public decimal TaxRateAmount { get; set; }
-        // 折扣金额
-        public string DiscountAmount { get; set; }
-        // 折扣税额
-        public string DiscountTaxRateAmount { get; set; }
-        // 折扣率值
-        public string DiscountRateValue { get; set; }
+        
     }
+
+
+    
+
     public class BlueViewModel:ViewModel
     {
         public BlueViewModel()
@@ -67,6 +66,7 @@ group by TCE.Description,TCTR.TaxRate,TCTR.TaxClassificationCode,BE.Price";
 
         public void UpdateData(int id, int window)
         {
+
             DataTable resDt = SqlHelper.ExecDQLForDataTable(resSql, new List<IDataParameter>(){
                 SqlHelper.CreateDataParameter("@resv_name_id",id)
             });
