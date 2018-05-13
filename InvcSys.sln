@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvcSys", "Src\InvcSys\Invc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piaotong.OpenApi", "Src\Piaotong.OpenApi\Piaotong.OpenApi.csproj", "{060D509E-16AB-410D-ADD0-5129EBEDE89F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Startup", "Src\Startup\Startup.csproj", "{BC4A0646-226E-4FEC-904F-399C78BB468E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,10 +24,6 @@ Global
 		{060D509E-16AB-410D-ADD0-5129EBEDE89F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{060D509E-16AB-410D-ADD0-5129EBEDE89F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{060D509E-16AB-410D-ADD0-5129EBEDE89F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BC4A0646-226E-4FEC-904F-399C78BB468E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC4A0646-226E-4FEC-904F-399C78BB468E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BC4A0646-226E-4FEC-904F-399C78BB468E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BC4A0646-226E-4FEC-904F-399C78BB468E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
