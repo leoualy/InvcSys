@@ -28,13 +28,26 @@ namespace InvcSys
             this.Loaded += HomeWindow_Loaded;
         }
 
+        BlueViewController mBlueViewController;
+        RedViewController mRedViewController;
+        QueryViewController mQueryViewController;
+        TaxViewController mTaxViewController;
         
         void HomeWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            this.tabBlue.Content = new BlueViewController();
-            this.tabRed.Content = new RedViewController();
-            this.tabQuery.Content = new QueryViewController();
-            this.tabTax.Content = new TaxViewController();
+            mBlueViewController = new BlueViewController();
+            mRedViewController = new RedViewController();
+            mQueryViewController = new QueryViewController();
+            mTaxViewController = new TaxViewController();
+            this.gridContent.Children.Clear();
+            this.gridContent.Children.Add(mBlueViewController);
+            this.gridContent.Children.Add(mRedViewController);
+            this.gridContent.Children.Add(mQueryViewController);
+            this.gridContent.Children.Add(mTaxViewController);
+            mRedViewController.Visibility = Visibility.Collapsed;
+            mQueryViewController.Visibility = Visibility.Collapsed;
+            mTaxViewController.Visibility = Visibility.Collapsed;
+            
             mcGridMask = this.gridMask;
             mcTbxStatus = this.tbxDrawStatus;
             gridMask.Visibility = Visibility.Collapsed;
@@ -87,5 +100,62 @@ namespace InvcSys
             mcGridMask.Visibility = System.Windows.Visibility.Visible;
             mcTbxStatus.Text = "正在发送开票请求...";
         }
+
+        private void btnBlue_click(object sender, RoutedEventArgs e)
+        {
+            mBlueViewController.Visibility = Visibility.Visible;
+            mRedViewController.Visibility = Visibility.Collapsed;
+            mQueryViewController.Visibility = Visibility.Collapsed;
+            mTaxViewController.Visibility = Visibility.Collapsed;
+            btnBlue.Background = Brushes.White;
+            btnRed.Background = Brushes.LightGray;
+            btnQuery.Background = Brushes.LightGray;
+            btnTax.Background = Brushes.LightGray;
+            
+
+        }
+
+        private void btnRed_Click(object sender, RoutedEventArgs e)
+        {
+            mBlueViewController.Visibility = Visibility.Collapsed;
+            mRedViewController.Visibility = Visibility.Visible;
+            mQueryViewController.Visibility = Visibility.Collapsed;
+            mTaxViewController.Visibility = Visibility.Collapsed;
+
+            btnBlue.Background = Brushes.LightGray;
+            btnRed.Background = Brushes.White;
+            btnQuery.Background = Brushes.LightGray;
+            btnTax.Background = Brushes.LightGray;
+
+        }
+
+        private void btnQuery_Click(object sender, RoutedEventArgs e)
+        {
+            mBlueViewController.Visibility = Visibility.Collapsed;
+            mRedViewController.Visibility = Visibility.Collapsed;
+            mQueryViewController.Visibility = Visibility.Visible;
+            mTaxViewController.Visibility = Visibility.Collapsed;
+
+            btnBlue.Background = Brushes.LightGray;
+            btnRed.Background = Brushes.LightGray;
+            btnQuery.Background = Brushes.White;
+            btnTax.Background = Brushes.LightGray;
+
+        }
+
+        private void btnTax_Click(object sender, RoutedEventArgs e)
+        {
+            mBlueViewController.Visibility = Visibility.Collapsed;
+            mRedViewController.Visibility = Visibility.Collapsed;
+            mQueryViewController.Visibility = Visibility.Collapsed;
+            mTaxViewController.Visibility = Visibility.Visible;
+
+            btnBlue.Background = Brushes.LightGray;
+            btnRed.Background = Brushes.LightGray;
+            btnQuery.Background = Brushes.LightGray;
+            btnTax.Background = Brushes.White;
+        }
+
+       
     }
 }

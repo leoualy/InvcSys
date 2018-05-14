@@ -45,12 +45,27 @@
                 </Button.Template>
           
             </Button>
-            <TabControl Grid.Row="1" Grid.ColumnSpan="2">
-                <TabItem Header="蓝票" Name="tabBlue" Height="25" Width="80"/>
-                <TabItem Header="红票" Name="tabRed" Height="25" Width="80"/>
-                <TabItem Header="发票查询" Name="tabQuery" Height="25" Width="80"/>
-                <TabItem Header="税率配置" Name="tabTax"/>
-            </TabControl>
+            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="9*"/>
+                </Grid.RowDefinitions>
+                <Button Background="White" Name="btnBlue" Click="btnBlue_click">蓝票</Button>
+                <Button Name="btnRed" Grid.Column="1" Click="btnRed_Click">红票</Button>
+                <Button Name="btnQuery" Grid.Column="2" Click="btnQuery_Click">发票查询</Button>
+                <Button Name="btnTax" Grid.Column="3" Click="btnTax_Click">税率配置</Button>
+                <Grid Background="White" Grid.Row="1" Grid.ColumnSpan="5" Name="gridContent">
+                    
+                </Grid>
+                
+            </Grid>
             <!--遮罩部分-->
             <Grid Grid.Row="1" Grid.ColumnSpan="2" Name="gridMask">
                 <Grid.Background>
