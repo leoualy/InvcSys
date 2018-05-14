@@ -26,6 +26,7 @@ namespace InvcSys
                 if (!mHomeWindow.IsActive)
                 {
                     mHomeWindow.Activate();
+                    mHomeWindow.Show();
                 }
                 mBlueViewModel.UpdateData(id, window);
             });
