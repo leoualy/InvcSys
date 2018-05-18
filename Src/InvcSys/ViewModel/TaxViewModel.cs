@@ -4,13 +4,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using System.Windows.Data;
 
 namespace InvcSys
 {
-    public class TransactionCodesEntity
+    public class TransactionCodesEntity:ViewModel
     {
         public string Trn_Code { get; set; }
         public string Description { get; set; }
+        string status;
+        public string Status
+        {
+            get { return status; }
+            set
+            {
+                status = value;
+                OnPropertyChanged("Status");
+            }
+        }
+        string mBtnTxt;
+
+        public string BtnTxt
+        {
+            get { return mBtnTxt; }
+            set { mBtnTxt = value;
+            OnPropertyChanged("BtnTxt");
+            }
+        }
 
     }
     public class GoodsTaxRate:ViewModel
@@ -27,6 +47,12 @@ namespace InvcSys
 
     public class TaxViewModel:ViewModel
     {
+        public TaxViewModel()
+        {
+            ViewSource = new CollectionViewSource();
+            ViewSource.Filter += ViewSource_Filter;
+            SelectedGoodsTaxRate = null;
+        }
         List<TransactionCodesEntity> mTCodeEntitys;
         public List<TransactionCodesEntity> TCodeEntitys
         {
@@ -68,7 +94,8 @@ namespace InvcSys
 
         public void LoadTCodeEntitys()
         {
-            string sql = "select Trn_Code,Description from TransationCodesEntity";
+            string sql = @"select TCE.Trn_Code,TCE.Description,ISNULL(TTR.TaxClassificationCode,0)as Status from 
+TrnCodeTaxRate TTR right join TransationCodesEntity TCE on TTR.TrnCode=TCE.Trn_Code";
             DataTable dt = SqlHelper.ExecDQLForDataTable(sql);
             if (mTCodeEntitys == null)
             {
@@ -77,6 +104,8 @@ namespace InvcSys
             foreach (DataRow row in dt.Rows)
             {
                 TransactionCodesEntity entity = SqlHelper.Row2Model<TransactionCodesEntity>(row);
+                entity.Status = entity.Status == "0" ? "未设置" : "已设置";
+                entity.BtnTxt = entity.Status == "未设置" ? "设定" : "更新";
                 mTCodeEntitys.Add(entity);
             }
         }
@@ -107,6 +136,8 @@ where GoodsName is not null ";
                 return "请选择税率类型";
             }
 
+            
+
             // 查重的sql
             string selectSql = "select 1 from TrnCodeTaxRate where TrnCode=@TrnCode";
             // 更新的sql
@@ -133,6 +164,9 @@ where TrnCode=@TrnCode";
                     {
                         return "保存设置失败!";
                     }
+                    SelectedTCodeEntity.Status = "已设置";
+                    SelectedTCodeEntity.BtnTxt = "更新";
+                    //SelectedGoodsTaxRate = null;
                     return "保存设置成功!";
                 }
 
@@ -142,7 +176,10 @@ where TrnCode=@TrnCode";
                     {
                         return "保存设置失败!";
                     }
+                    SelectedTCodeEntity.Status = "已设置";
+                    //SelectedGoodsTaxRate = null;
                     return "保存设置成功!";
+
                 }
 
                 return "其他错误";
@@ -152,6 +189,41 @@ where TrnCode=@TrnCode";
                 return e.Message;
             }
         }
+
+        #region 税率类型显示
+        string mTextFilter;
+        public string TextFilter
+        {
+            get { return mTextFilter; }
+            set
+            {
+                mTextFilter = value;
+                OnPropertyChanged("TextFilter");
+                ViewSource.View.Refresh();
+            }
+        }
+
+        CollectionViewSource mViewSource;
+
+        public CollectionViewSource ViewSource
+        {
+            get { return mViewSource; }
+            set
+            {
+                mViewSource = value;
+                OnPropertyChanged("CollectionViewSource");
+            }
+        }
+        void ViewSource_Filter(object sender, FilterEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(TextFilter))
+            {
+                var val = e.Item as GoodsTaxRate;
+                e.Accepted = val != null && val.GoodsName.Contains(TextFilter.Trim());
+            }
+        }
+        #endregion 税率类型显示
+
 
     }
 }

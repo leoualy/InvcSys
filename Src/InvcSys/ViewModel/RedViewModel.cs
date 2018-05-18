@@ -41,6 +41,16 @@ namespace InvcSys
             return null;
         }
 
+        public void ClearData()
+        {
+            TaxpayerNum = string.Empty;
+            InvoiceReqSerialNo = string.Empty;
+            InvoiceCode = string.Empty;
+            InvoiceNo = string.Empty;
+            RedReason = string.Empty;
+            Amount = string.Empty;
+        }
+
         string checkRed()
         {
             if (string.IsNullOrWhiteSpace(this.InvoiceCode))
@@ -137,7 +147,7 @@ namespace InvcSys
             }
         }
 
-
+        
 
         
     }

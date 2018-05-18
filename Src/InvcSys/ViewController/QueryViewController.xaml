@@ -19,53 +19,101 @@
                     <ColumnDefinition Width="0.7*"/>
                     <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="0.3*"/>
-                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock VerticalAlignment="Center">纳税人识别号</TextBlock>
-                <TextBlock VerticalAlignment="Center" Grid.Row="1">发票请求流水号</TextBlock>
+                <TextBlock VerticalAlignment="Center">纳税人识别号:</TextBlock>
+                <TextBlock VerticalAlignment="Center" Grid.Row="1">发票请求流水号:</TextBlock>
                 
-                <TextBox Grid.Column="1" Margin="4" Text="{Binding TaxpayerNum}"/>
-                <TextBox Grid.Column="1" Grid.Row="1" Margin="4" Text="{Binding InvoiceReqSerialNo}"/>
+                <TextBox Grid.Column="1" Margin="4" Text="{Binding TaxpayerNum}">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Style.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsFocused" Value="False"></Condition>
+                                        <Condition Property="Text" Value=""></Condition>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <VisualBrush AlignmentX="Left" AlignmentY="Top" Stretch="None">
+                                                <VisualBrush.Visual>
+                                                    <TextBlock Padding="5,2" Background="Transparent" Foreground="Silver"  FontSize="14" Text="15-20位的大写字母或者数字"/>
+                                                </VisualBrush.Visual>
+                                            </VisualBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </MultiTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <TextBox Grid.Column="1" Grid.Row="1" Margin="4" Text="{Binding InvoiceReqSerialNo}">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Style.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsFocused" Value="False"></Condition>
+                                        <Condition Property="Text" Value=""></Condition>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <VisualBrush AlignmentX="Left" AlignmentY="Top" Stretch="None">
+                                                <VisualBrush.Visual>
+                                                    <TextBlock Padding="5,2" Background="Transparent" Foreground="Silver"  FontSize="14" Text="20位的字母或者数字"/>
+                                                </VisualBrush.Visual>
+                                            </VisualBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </MultiTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
 
                 <TextBlock Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2">(必填*)</TextBlock>
                 <TextBlock Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1">(必填*)</TextBlock>
 
 
-                <Button Grid.Column="3" Margin="5" Click="btn_queryPaper">查询纸质发票</Button>
-                <Button Grid.Column="3" Grid.Row="1" Margin="5" Click="btn_queryElectronic">查询电子发票</Button>
+                <Button Grid.Column="3" Grid.Row="1" Margin="5" Click="btn_queryPaper">查询纸质发票</Button>
+                <Button Grid.Column="3"  Margin="5" Click="btn_queryElectronic">查询电子发票</Button>
+                <Button Grid.Column="4" Margin="5" Click="btn_ClearData">清空数据</Button>
             </Grid>
         </GroupBox>
-        
-        <Grid Grid.Row="1" Margin="120,32">
+        <GroupBox Grid.Row="1" Header="查询结果">
+            <Grid Grid.Row="1" Margin="120,32">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="28"/>
                     <RowDefinition Height="28"/>
                     <RowDefinition Height="28"/>
                     <RowDefinition Height="28"/>
                     <RowDefinition Height="28"/>
-                <RowDefinition Height="28"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="9*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0">开票类型:</TextBlock>
-            <TextBlock Grid.Column="0" Grid.Row="1">开票号码:</TextBlock>
-            <TextBlock Grid.Column="0" Grid.Row="2">开票状态:</TextBlock>
-            <TextBlock Grid.Column="0" Grid.Row="3">订单号:</TextBlock>
-            <TextBlock Grid.Column="0" Grid.Row="4">开票日期:</TextBlock>
-            <TextBlock Grid.Column="0" Grid.Row="5">下载链接:</TextBlock>
-            
-                
-                
+                    <RowDefinition Height="28"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="9*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0">开票类型:</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="1">开票号码:</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="2">开票状态:</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="3">订单号:</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="4">开票日期:</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="5">下载链接:</TextBlock>
+
+
+
                 <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding InvoiceType}"/>
                 <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding InvoiceNo}"/>
                 <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Code}"/>
                 <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding TradeNo}"/>
-            <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding InvoiceDate}"/>
-            <TextBlock Grid.Column="1" Grid.Row="5" Text="{Binding DownloadUrl}"/>
+                <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding InvoiceDate}"/>
+                <TextBlock Grid.Column="1" Grid.Row="5" Text="{Binding DownloadUrl}"/>
 
-        </Grid>
+            </Grid>
+        </GroupBox>
+       
         
         
     </Grid>

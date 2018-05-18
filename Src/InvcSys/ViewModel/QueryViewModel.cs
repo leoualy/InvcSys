@@ -10,15 +10,10 @@ namespace InvcSys
     {
         public QueryViewModel()
         {
+            
+            ClearData();
             mTaxpayerNum = "110101201702071";
             mInvoiceReqSerialNo = "DEMO2490591817271482";
-
-            mInvoiceNo = "无";
-            mInvoiceType = "无";
-            mTradeNo = "无";
-            mInvoiceDate = "0000-00-00";
-            mDownloadUrl = "http://";
-            mCode = "无";
         }
         public string QueryElectric()
         {
@@ -64,6 +59,17 @@ namespace InvcSys
             return null;
         }
 
+        public void ClearData()
+        {
+            TaxpayerNum = string.Empty;
+            InvoiceReqSerialNo = string.Empty;
+            InvoiceNo = "空";
+            InvoiceType = "空";
+            TradeNo = "空";
+            InvoiceDate = "0000-00-00";
+            DownloadUrl = "空";
+            Code = "空";
+        }
 
 
         string mTaxpayerNum;

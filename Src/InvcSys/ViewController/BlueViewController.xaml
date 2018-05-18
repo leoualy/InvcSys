@@ -8,7 +8,7 @@
     <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="5.3*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -59,7 +59,29 @@
                     <TextBlock Grid.Row="6" VerticalAlignment="Center">邮箱:</TextBlock>
 
                     <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Height="27" Text="{Binding BuyerName}"/>
-                    <TextBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="27" Text="{Binding TaxPayerNum}"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="27" Text="{Binding TaxPayerNum}">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Style.Triggers>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsFocused" Value="False"></Condition>
+                                            <Condition Property="Text" Value=""></Condition>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <VisualBrush AlignmentX="Left" AlignmentY="Top" Stretch="None">
+                                                    <VisualBrush.Visual>
+                                                        <TextBlock Padding="5,2" Background="Transparent" Foreground="Silver"  FontSize="14" Text="15-20位的大写字母或者数字"/>
+                                                    </VisualBrush.Visual>
+                                                </VisualBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </MultiTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
                     <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Height="27" Text="{Binding BuyerAddress}"/>
                     <TextBox Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Height="27" Text="{Binding BuyerTel}"/>
                     <TextBox Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" Height="27" Text="{Binding BuyerBankName}"/>

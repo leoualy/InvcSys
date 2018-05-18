@@ -3,71 +3,76 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             
              mc:Ignorable="d" 
              Width="760" Height="520">
-    <Grid Background="White">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="5*"/>
-        </Grid.ColumnDefinitions>
-        <GroupBox Header="配置操作" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" >
-            <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Height="360" Margin="10,20">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="56"/>
-                    <RowDefinition Height="56"/>
-                    <RowDefinition Height="42"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3.5*"/>
-                    <ColumnDefinition Width="9*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock VerticalAlignment="Center">货物和劳务名称:</TextBlock>
-                <TextBlock Grid.Row="1" VerticalAlignment="Center">税率类型:</TextBlock>
-                <ComboBox Grid.Column="1" Width="196" HorizontalAlignment="Left" Height="32" 
-                      ItemsSource="{Binding TCodeEntitys}" 
-                      DisplayMemberPath="Description" 
-                      SelectedIndex="0" SelectedValue="{Binding Path=SelectedTCodeEntity}">
-                    <ComboBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel/>
-                        </ItemsPanelTemplate>
-                    </ComboBox.ItemsPanel>
-                </ComboBox>
-                <ComboBox Grid.Row="1" Grid.Column="1" Width="196" HorizontalAlignment="Left" Height="32"
-                      ItemsSource="{Binding GoodsTaxRates}" 
-                      DisplayMemberPath="GoodsName" 
-                      SelectedIndex="0" SelectedValue="{Binding Path=SelectedGoodsTaxRate}"
-                      >
-                    <ComboBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel/>
-                        </ItemsPanelTemplate>
-                    </ComboBox.ItemsPanel>
-                </ComboBox>
-                <Button Click="btn_save" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Width="96" Height="32">保存设置</Button>
-            </Grid>
-        </GroupBox>
-        
-        <GroupBox Header="税率类型说明" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center">
-            <Grid  Height="360" Margin="20">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock>
-                    <Run>税率：</Run>
-                    <Run Text="{Binding SelectedGoodsTaxRate.TaxRate }"/>
-                </TextBlock>
-                <TextBlock Grid.Row="1"  Width="240" Text="{Binding SelectedGoodsTaxRate.Instruction}"
-                        HorizontalAlignment="Center" 
-                        TextWrapping="Wrap"
-                        Margin="0,10"
-                        />
-            </Grid>
+    <GroupBox Header="税率配置" Background="White">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <DockPanel Margin="24,24">
+                <DockPanel DockPanel.Dock="Top">
+                    <TextBlock DockPanel.Dock="Left">税率类型</TextBlock>
+                    <Button Width="40" DockPanel.Dock="Right" Click="btn_clearTaxType">清空</Button>
+                    <TextBlock DockPanel.Dock="Right"></TextBlock>
+                </DockPanel>
+               
+                <TextBox Margin="0,5,0,0" Name="txtFilter" Height="56" DockPanel.Dock="Top" TextChanged="txtFilter_TextChanged" TextWrapping="Wrap">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Style.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsFocused" Value="False"></Condition>
+                                        <Condition Property="Text" Value=""></Condition>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <VisualBrush AlignmentX="Left" AlignmentY="Top" Stretch="None">
+                                                <VisualBrush.Visual>
+                                                    <TextBlock Padding="5,2" Background="Transparent" Foreground="Silver"  FontSize="14" 
+                                                               Text="输入关键字"/>
+                                                </VisualBrush.Visual>
+                                            </VisualBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </MultiTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <ListView Name="lvTaxRate" ItemsSource="{Binding ViewSource.View}" SelectionChanged="lv_selected" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="税率代码" DisplayMemberBinding="{Binding TaxClassificationCode}" />
+                            <GridViewColumn Header="税率名称" DisplayMemberBinding="{Binding GoodsName}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </DockPanel>
+            <DockPanel Margin="24,24" Grid.Column="1">
+                <TextBlock DockPanel.Dock="Top">货物和劳务名称</TextBlock>
+                <ListView Name="lvGoods" ItemsSource="{Binding TCodeEntitys}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="名称" DisplayMemberBinding="{Binding Description}" />
+                            <GridViewColumn Header="状态" Width="70" DisplayMemberBinding="{Binding Status}" />
+                            <GridViewColumn Header="操作">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Click="btn_save"  Width="45"
+                                                CommandParameter="{Binding Trn_Code }" Content="{Binding BtnTxt}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </DockPanel>
             
-        </GroupBox>
-        
-        
-        
-    </Grid>
+        </Grid>
+
+    </GroupBox>
 </UserControl>

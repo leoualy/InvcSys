@@ -51,6 +51,7 @@ namespace InvcSys
         }
 
         internal static event Action<string> OnHttpPost;
+       
         /// <summary>
         /// 开具电子蓝票
         /// </summary>
@@ -167,10 +168,6 @@ namespace InvcSys
                     TaxHelper.GetTaxAmount(item.Quantity,item.Price,item.TaxRate):item.TaxRateAmount)).ToString(),
                     
                     taxClassificationCode=item.TaxClassificationCode,
-                    // 折扣部分
-                    //discountAmount=item.DiscountAmount,
-                    //discountRateValue=item.DiscountRateValue,
-                    //discountTaxRateAmount=item.DiscountTaxRateAmount
                 });
             }
             // 项目列表
@@ -231,6 +228,12 @@ namespace InvcSys
                 {
                     OnHttpPost(type + "发票查询" + rsp.msg);
                 }
+                //if (OnQueryHttpPost != null)
+                //{
+                //    OnQueryHttpPost(type + "发票查询", rsp.code);
+                //}
+
+
                 if (rsp.code == "0000")
                 {
                     viewModel.Code = rsp.QueryContent.code == "0000" ? "开票成功" : rsp.QueryContent.code == "9999" ? "开票中" : "失败";
@@ -240,6 +243,17 @@ namespace InvcSys
                     viewModel.InvoiceNo = rsp.QueryContent.invoiceNo;
                     viewModel.DownloadUrl =rsp.QueryContent.downloadUrl;
                 }
+                else
+                {
+                    viewModel.Code ="空";
+                    viewModel.InvoiceDate = "0000-00-00";
+                    viewModel.InvoiceType = "空";
+                    viewModel.TradeNo ="空";
+                    viewModel.InvoiceNo ="空";
+                    viewModel.DownloadUrl ="空";
+                }
+
+
             });
         }
         #endregion 类私有

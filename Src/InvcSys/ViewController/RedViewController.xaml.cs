@@ -59,6 +59,12 @@ namespace InvcSys.ViewController
             return true;
         }
 
+        private void btn_Clear(object sender, RoutedEventArgs e)
+        {
+            mViewModel.ClearData();
+            txtDefineData.Clear();
+        }
+
 
     }
 }

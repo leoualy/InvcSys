@@ -48,7 +48,7 @@ namespace InvcSys
     {
         public BlueViewModel()
         {
-            mBlueGoodses = new List<BlueGoods>();
+            //mBlueGoodses = new List<BlueGoods>();
         }
         #region sql
         // 查询购买方公司信息
@@ -64,12 +64,30 @@ group by TCE.Description,TCTR.TaxRate,TCTR.TaxClassificationCode,BE.Price";
         #endregion sql
 
 
+        void clearUIData()
+        {
+            BlueGoodses = null;
+            BuyerName = string.Empty;
+            BuyerAddress = string.Empty;
+            BuyerTel = string.Empty;
+            BuyerEmail = string.Empty;
+
+            // 待修改
+            //TaxPayerNum = "110101201702071";
+            TaxPayerNum = string.Empty;
+        }
+
         public void UpdateData(int id, int window)
         {
 
             DataTable resDt = SqlHelper.ExecDQLForDataTable(resSql, new List<IDataParameter>(){
                 SqlHelper.CreateDataParameter("@resv_name_id",id)
             });
+            if (resDt == null || resDt.Rows.Count <= 0)
+            {
+                clearUIData();
+                return;
+            }
             List<IDataParameter> billParams = new List<IDataParameter>() 
             { 
                 SqlHelper.CreateDataParameter("@resv_name_id",id),
@@ -79,6 +97,7 @@ group by TCE.Description,TCTR.TaxRate,TCTR.TaxClassificationCode,BE.Price";
             DataTable dt = SqlHelper.ExecDQLForDataTable(billSql, billParams);
             if (dt == null || dt.Rows.Count <= 0)
             {
+                clearUIData();
                 return;
             }
             List<BlueGoods> goods = new List<BlueGoods>();

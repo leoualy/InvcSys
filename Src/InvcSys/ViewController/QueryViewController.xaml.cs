@@ -34,6 +34,7 @@ namespace InvcSys.ViewController
             string ret = mQueryViewModel.QueryPaper();
             if (!string.IsNullOrWhiteSpace(ret))
             {
+
                 MessageBox.Show(ret);
             }
         }
@@ -45,6 +46,11 @@ namespace InvcSys.ViewController
             {
                 MessageBox.Show(ret);
             }
+        }
+
+        private void btn_ClearData(object sender, RoutedEventArgs e)
+        {
+            mQueryViewModel.ClearData();
         }
         
     }
